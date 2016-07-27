@@ -1,0 +1,309 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>RTW Report - rpi_spi.c</title>
+<style> .LN { font-style: italic; color: #888888 } </style>
+<style> .CT { font-style: italic; color: #117755 } </style>
+<style> .PP { font-style: bold;   color: #992211 } </style>
+<style> .KW { font-style: bold;   color: #112266 } </style>
+<style> .DT { font-style: bold;   color: #112266 } </style>
+<link rel="stylesheet" type="text/css" href="rtwreport.css"></link><script language="JavaScript" type="text/javascript" src="rtwreport_utils.js"></script>
+<SCRIPT type="text/javascript" src="rtwannotate.js"></SCRIPT>
+</head>
+<body bgcolor="#eeeeee" text="#1122aa" onload="try {if (top) { if (top.rtwFileOnLoad) top.rtwFileOnLoad(window.document); else local_onload();}} catch(err) {};if (typeof rtwannotate === 'function') {rtwannotate('rpi_spi_c_cov.xml');}">
+<p>
+<table border="0" cellspacing="0" cellpadding="6" width="100%%" height="100%%"><tr><td width="100%%" valign="top" bgcolor="#ffffff">
+<h4>File: <a href="../../rpi_spi.c" target="rtwreport_document_frame" id="linkToText_plain">rpi_spi.c</a></h4>
+<pre id="RTWcode">
+<span><a class="LN" name="1">    1   </a><span class="CT">/*</span>
+</span><span><a class="LN" name="2">    2   </a><span class="CT">  Communication with Raspberry Pi equipped by 3-phase</span>
+</span><span><a class="LN" name="3">    3   </a><span class="CT">  motor driver and RPI-MI-1 FPGA board designed</span>
+</span><span><a class="LN" name="4">    4   </a><span class="CT">  by Petr Porazil for PiKRON company.</span>
+</span><span><a class="LN" name="5">    5   </a><span class="CT">  The VHDL design by Martin Prudek.</span>
+</span><span><a class="LN" name="6">    6   </a><span class="CT"></span>
+</span><span><a class="LN" name="7">    7   </a><span class="CT">  (C) 2015 by Martin Prudek prudemar@fel.cvut.cz</span>
+</span><span><a class="LN" name="8">    8   </a><span class="CT">  (C) 2015 by Pavel Pisa pisa@cmp.felk.cvut.cz</span>
+</span><span><a class="LN" name="9">    9   </a><span class="CT"> */</span>
+</span><span><a class="LN" name="10">   10   </a>
+</span><span><a class="LN" name="11">   11   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&lt;stdint.h&gt;</font>
+</span><span><a class="LN" name="12">   12   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&lt;unistd.h&gt;</font>
+</span><span><a class="LN" name="13">   13   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&lt;stdio.h&gt;</font>
+</span><span><a class="LN" name="14">   14   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&lt;stdlib.h&gt;</font>
+</span><span><a class="LN" name="15">   15   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&lt;string.h&gt;</font>
+</span><span><a class="LN" name="16">   16   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&lt;getopt.h&gt;</font>
+</span><span><a class="LN" name="17">   17   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&lt;fcntl.h&gt;</font>
+</span><span><a class="LN" name="18">   18   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&lt;sys/ioctl.h&gt;</font>
+</span><span><a class="LN" name="19">   19   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&lt;linux/types.h&gt;</font>
+</span><span><a class="LN" name="20">   20   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&lt;linux/spi/spidev.h&gt;</font>
+</span><span><a class="LN" name="21">   21   </a>
+</span><span><a class="LN" name="22">   22   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&quot;rpi_spimc.h&quot;</font>
+</span><span><a class="LN" name="23">   23   </a>
+</span><span><a class="LN" name="24">   24   </a><font color="#992211">#</font><span class="PP">define</span> SPIMC_INDEX_BITS 12
+</span><span><a class="LN" name="25">   25   </a><font color="#992211">#</font><span class="PP">define</span> SPIMC_INDEX_MASK ((1 &lt;&lt; SPIMC_INDEX_BITS) - 1)
+</span><span><a class="LN" name="26">   26   </a>
+</span><span><a class="LN" name="27">   27   </a><span class="DT">static</span> uint8_t <a name="var_spimc_mode">spimc_mode</a> = 0;
+</span><span><a class="LN" name="28">   28   </a><span class="DT">static</span> uint8_t <a name="var_spimc_bits">spimc_bits</a> = 8;
+</span><span><a class="LN" name="29">   29   </a><span class="DT">static</span> uint32_t <a name="var_spimc_speed">spimc_speed</a> = 500000;
+</span><span><a class="LN" name="30">   30   </a><span class="DT">static</span> uint16_t <a name="var_spimc_delay">spimc_delay</a> = 0;
+</span><span><a class="LN" name="31">   31   </a>
+</span><span><a class="LN" name="32">   32   </a><span class="DT">static</span> <span class="DT">void</span> <a name="fcn_pabort">pabort</a>(<span class="DT">const</span> <span class="DT">char</span> *s)
+</span><span><a class="LN" name="33">   33   </a><b>{</b>
+</span><span><a class="LN" name="34">   34   </a>        perror(s);
+</span><span><a class="LN" name="35">   35   </a>        abort();
+</span><span><a class="LN" name="36">   36   </a><b>}</b>
+</span><span><a class="LN" name="37">   37   </a>
+</span><span><a class="LN" name="38">   38   </a><span class="DT">int</span> <a name="fcn_spimc_transfer">spimc_transfer</a>(spimc_state_t *spimcst)
+</span><span><a class="LN" name="39">   39   </a><b>{</b>
+</span><span><a class="LN" name="40">   40   </a>	uint8_t *tx = spimcst-&gt;tx_buf;
+</span><span><a class="LN" name="41">   41   </a>	uint8_t *rx = spimcst-&gt;rx_buf;
+</span><span><a class="LN" name="42">   42   </a>	<span class="DT">int</span> ret;
+</span><span><a class="LN" name="43">   43   </a>	uint32_t pwm1, pwm2, pwm3;
+</span><span><a class="LN" name="44">   44   </a>	uint32_t idx;
+</span><span><a class="LN" name="45">   45   </a>	int32_t  idxdiff;
+</span><span><a class="LN" name="46">   46   </a>
+</span><span><a class="LN" name="47">   47   </a>	memset(tx, 0, SPIMC_TRANSFER_SIZE);
+</span><span><a class="LN" name="48">   48   </a>	memset(rx, 0, SPIMC_TRANSFER_SIZE);
+</span><span><a class="LN" name="49">   49   </a>
+</span><span><a class="LN" name="50">   50   </a>	<span class="CT">/*Data format:</span>
+</span><span><a class="LN" name="51">   51   </a><span class="CT">	 * rx[0] - bity 127 downto 120 the first income bit..127</span>
+</span><span><a class="LN" name="52">   52   </a><span class="CT">	 * rx[1] - bity 119 downto 112</span>
+</span><span><a class="LN" name="53">   53   </a><span class="CT">	 * rx[2] - bity 111 downto 104</span>
+</span><span><a class="LN" name="54">   54   </a><span class="CT">	 * rx[3] - bity 103 downto 96</span>
+</span><span><a class="LN" name="55">   55   </a><span class="CT">	 * tx[4] - bity 95 downto 88</span>
+</span><span><a class="LN" name="56">   56   </a><span class="CT">	 * tx[5] - bity 87 downto 80</span>
+</span><span><a class="LN" name="57">   57   </a><span class="CT">	 * tx[6] - bity 79 downto 72</span>
+</span><span><a class="LN" name="58">   58   </a><span class="CT">	 * tx[7] - bity 71 downto 64</span>
+</span><span><a class="LN" name="59">   59   </a><span class="CT">	 * tx[8] - bity 63 downto 56</span>
+</span><span><a class="LN" name="60">   60   </a><span class="CT">	 * tx[9] - bity 55 downto 48</span>
+</span><span><a class="LN" name="61">   61   </a><span class="CT">	 * tx[10] - bity 47 downto 40</span>
+</span><span><a class="LN" name="62">   62   </a><span class="CT">	 * tx[11] - bity 39 downto 32</span>
+</span><span><a class="LN" name="63">   63   </a><span class="CT">	 * tx[12] - bity 31 downto 24</span>
+</span><span><a class="LN" name="64">   64   </a><span class="CT">	 * tx[13] - bity 23 downto 16</span>
+</span><span><a class="LN" name="65">   65   </a><span class="CT">	 * tx[14] - bity 15 downto 8</span>
+</span><span><a class="LN" name="66">   66   </a><span class="CT">	 * tx[15] - bity 7 downto 0</span>
+</span><span><a class="LN" name="67">   67   </a><span class="CT">	 *</span>
+</span><span><a class="LN" name="68">   68   </a><span class="CT">	 * bit 127 - ADC reset</span>
+</span><span><a class="LN" name="69">   69   </a><span class="CT">	 * bit 126 - enable PWM1</span>
+</span><span><a class="LN" name="70">   70   </a><span class="CT">	 * bit 125 - enable PWM2</span>
+</span><span><a class="LN" name="71">   71   </a><span class="CT">	 * bit 124 - enable PWM3</span>
+</span><span><a class="LN" name="72">   72   </a><span class="CT">	 * bit 123 - shutdown1</span>
+</span><span><a class="LN" name="73">   73   </a><span class="CT">	 * bit 122 - shutdown2</span>
+</span><span><a class="LN" name="74">   74   </a><span class="CT">	 * bit 121 - shutdown3</span>
+</span><span><a class="LN" name="75">   75   </a><span class="CT">	 * 	.</span>
+</span><span><a class="LN" name="76">   76   </a><span class="CT">	 * bits 47 .. 32 - match PWM1</span>
+</span><span><a class="LN" name="77">   77   </a><span class="CT">	 * bits 31 .. 16 - match PWM2</span>
+</span><span><a class="LN" name="78">   78   </a><span class="CT">	 * bits 15 .. 0  - match PWM3</span>
+</span><span><a class="LN" name="79">   79   </a><span class="CT">	 */</span>
+</span><span><a class="LN" name="80">   80   </a>
+</span><span><a class="LN" name="81">   81   </a>	pwm1 = spimcst-&gt;pwm[0];
+</span><span><a class="LN" name="82">   82   </a>	pwm2 = spimcst-&gt;pwm[1];
+</span><span><a class="LN" name="83">   83   </a>	pwm3 = spimcst-&gt;pwm[2];
+</span><span><a class="LN" name="84">   84   </a>
+</span><span><a class="LN" name="85">   85   </a>	tx[0] = 0;
+</span><span><a class="LN" name="86">   86   </a>	<span class="KW">if</span> (pwm1 &amp; SPIMC_PWM_ENABLE)
+</span><span><a class="LN" name="87">   87   </a>	  tx[0] |= 1 &lt;&lt; 6;
+</span><span><a class="LN" name="88">   88   </a>	<span class="KW">if</span> (pwm1 &amp; SPIMC_PWM_SHUTDOWN)
+</span><span><a class="LN" name="89">   89   </a>	  tx[0] |= 1 &lt;&lt; 3;
+</span><span><a class="LN" name="90">   90   </a>	<span class="KW">if</span> (pwm2 &amp; SPIMC_PWM_ENABLE)
+</span><span><a class="LN" name="91">   91   </a>	  tx[0] |= 1 &lt;&lt; 5;
+</span><span><a class="LN" name="92">   92   </a>	<span class="KW">if</span> (pwm2 &amp; SPIMC_PWM_SHUTDOWN)
+</span><span><a class="LN" name="93">   93   </a>	  tx[0] |= 1 &lt;&lt; 2;
+</span><span><a class="LN" name="94">   94   </a>	<span class="KW">if</span> (pwm3 &amp; SPIMC_PWM_ENABLE)
+</span><span><a class="LN" name="95">   95   </a>	  tx[0] |= 1 &lt;&lt; 4;
+</span><span><a class="LN" name="96">   96   </a>	<span class="KW">if</span> (pwm3 &amp; SPIMC_PWM_SHUTDOWN)
+</span><span><a class="LN" name="97">   97   </a>	  tx[0] |= 1 &lt;&lt; 1;
+</span><span><a class="LN" name="98">   98   </a>
+</span><span><a class="LN" name="99">   99   </a>	pwm1 &amp;= SPIMC_PWM_VALUE_m;
+</span><span><a class="LN" name="100">  100   </a>	pwm2 &amp;= SPIMC_PWM_VALUE_m;
+</span><span><a class="LN" name="101">  101   </a>	pwm3 &amp;= SPIMC_PWM_VALUE_m;
+</span><span><a class="LN" name="102">  102   </a>
+</span><span><a class="LN" name="103">  103   </a>	<span class="CT">/* keep the cap*/</span>
+</span><span><a class="LN" name="104">  104   </a>	<span class="KW">if</span> (pwm1 &gt; 2047) pwm1 = 2047;
+</span><span><a class="LN" name="105">  105   </a>	<span class="KW">if</span> (pwm2 &gt; 2047) pwm2 = 2047;
+</span><span><a class="LN" name="106">  106   </a>	<span class="KW">if</span> (pwm3 &gt; 2047) pwm3 = 2047;
+</span><span><a class="LN" name="107">  107   </a>
+</span><span><a class="LN" name="108">  108   </a>	<span class="CT">/*pwm1*/</span>
+</span><span><a class="LN" name="109">  109   </a>	tx[10] = pwm1 &gt;&gt; 8;   <span class="CT">/*MSB*/</span>
+</span><span><a class="LN" name="110">  110   </a>	tx[11] = pwm1 &amp; 0xff; <span class="CT">/*LSB*/</span>
+</span><span><a class="LN" name="111">  111   </a>
+</span><span><a class="LN" name="112">  112   </a>	<span class="CT">/*pwm2*/</span>
+</span><span><a class="LN" name="113">  113   </a>	tx[12] = pwm2 &gt;&gt; 8;   <span class="CT">/*MSB*/</span>
+</span><span><a class="LN" name="114">  114   </a>	tx[13] = pwm2 &amp; 0xff; <span class="CT">/*LSB*/</span>
+</span><span><a class="LN" name="115">  115   </a>
+</span><span><a class="LN" name="116">  116   </a>	<span class="CT">/*pwm3*/</span>
+</span><span><a class="LN" name="117">  117   </a>	tx[14] = pwm3 &gt;&gt; 8;   <span class="CT">/*MSB*/</span>
+</span><span><a class="LN" name="118">  118   </a>	tx[15] = pwm3 &amp; 0xff; <span class="CT">/*LSB*/</span>
+</span><span><a class="LN" name="119">  119   </a>
+</span><span><a class="LN" name="120">  120   </a>	<span class="KW">struct</span> spi_ioc_transfer tr = <b>{</b>
+</span><span><a class="LN" name="121">  121   </a>		.tx_buf = (uintptr_t)tx,
+</span><span><a class="LN" name="122">  122   </a>		.rx_buf = (uintptr_t)rx,
+</span><span><a class="LN" name="123">  123   </a>		.len = SPIMC_TRANSFER_SIZE,
+</span><span><a class="LN" name="124">  124   </a>		.delay_usecs = spimc_delay,
+</span><span><a class="LN" name="125">  125   </a>		.speed_hz = spimc_speed,
+</span><span><a class="LN" name="126">  126   </a>		.bits_per_word = spimc_bits,
+</span><span><a class="LN" name="127">  127   </a>	<b>}</b>;
+</span><span><a class="LN" name="128">  128   </a>
+</span><span><a class="LN" name="129">  129   </a>	ret = ioctl(spimcst-&gt;spi_fd, SPI_IOC_MESSAGE(1), &amp;tr);
+</span><span><a class="LN" name="130">  130   </a>	<span class="KW">if</span> (ret &lt; 1)
+</span><span><a class="LN" name="131">  131   </a>		<span class="KW">return</span> -1;
+</span><span><a class="LN" name="132">  132   </a>
+</span><span><a class="LN" name="133">  133   </a>	<span class="CT">/*prichozi data:</span>
+</span><span><a class="LN" name="134">  134   </a><span class="CT">	 * rx[0] - bity 127 downto 120 the first income bit..127</span>
+</span><span><a class="LN" name="135">  135   </a><span class="CT">	 * rx[1] - bity 119 downto 112</span>
+</span><span><a class="LN" name="136">  136   </a><span class="CT">	 * rx[2] - bity 111 downto 104</span>
+</span><span><a class="LN" name="137">  137   </a><span class="CT">	 * rx[3] - bity 103 downto 96</span>
+</span><span><a class="LN" name="138">  138   </a><span class="CT">	 * rx[4] - bity 95 downto 88</span>
+</span><span><a class="LN" name="139">  139   </a><span class="CT">	 * rx[5] - bity 87 downto 80</span>
+</span><span><a class="LN" name="140">  140   </a><span class="CT">	 * rx[6] - bity 79 downto 72</span>
+</span><span><a class="LN" name="141">  141   </a><span class="CT">	 * rx[7] - bity 71 downto 64</span>
+</span><span><a class="LN" name="142">  142   </a><span class="CT">	 * rx[8] - bity 63 downto 56</span>
+</span><span><a class="LN" name="143">  143   </a><span class="CT">	 * rx[9] - bity 55 downto 48</span>
+</span><span><a class="LN" name="144">  144   </a><span class="CT">	 * rx[10] - bity 47 downto 40</span>
+</span><span><a class="LN" name="145">  145   </a><span class="CT">	 * rx[11] - bity 39 downto 32</span>
+</span><span><a class="LN" name="146">  146   </a><span class="CT">	 * rx[12] - bity 31 downto 24</span>
+</span><span><a class="LN" name="147">  147   </a><span class="CT">	 * rx[13] - bity 23 downto 16</span>
+</span><span><a class="LN" name="148">  148   </a><span class="CT">	 * rx[14] - bity 15 downto 8</span>
+</span><span><a class="LN" name="149">  149   </a><span class="CT">	 * rx[15] - bity 7 downto 0	the last income bit..0</span>
+</span><span><a class="LN" name="150">  150   </a><span class="CT">	 */</span>
+</span><span><a class="LN" name="151">  151   </a>
+</span><span><a class="LN" name="152">  152   </a>	<span class="CT">/* position from IRC counter */</span>
+</span><span><a class="LN" name="153">  153   </a>	spimcst-&gt;act_pos = ((uint32_t)rx[0] &lt;&lt; 24) |
+</span><span><a class="LN" name="154">  154   </a>			   ((uint32_t)rx[1] &lt;&lt; 16) |
+</span><span><a class="LN" name="155">  155   </a>			   ((uint32_t)rx[2] &lt;&lt; 8) |
+</span><span><a class="LN" name="156">  156   </a>			   ((uint32_t)rx[3] &lt;&lt; 0);
+</span><span><a class="LN" name="157">  157   </a>
+</span><span><a class="LN" name="158">  158   </a>	<span class="CT">/*halove sondy</span>
+</span><span><a class="LN" name="159">  159   </a><span class="CT">	 * hal1 - bit95</span>
+</span><span><a class="LN" name="160">  160   </a><span class="CT">	 * hal2 - bit94</span>
+</span><span><a class="LN" name="161">  161   </a><span class="CT">	 * hal3 - bit93</span>
+</span><span><a class="LN" name="162">  162   </a><span class="CT">	 */</span>
+</span><span><a class="LN" name="163">  163   </a>	spimcst-&gt;hal_sensors = ((0x80 &amp; rx[4]) &gt;&gt; 7) |
+</span><span><a class="LN" name="164">  164   </a>                               ((0x40 &amp; rx[4]) &gt;&gt; 5) |
+</span><span><a class="LN" name="165">  165   </a>                               ((0x20 &amp; rx[4]) &gt;&gt; 3);
+</span><span><a class="LN" name="166">  166   </a>
+</span><span><a class="LN" name="167">  167   </a>	<span class="CT">/* index position</span>
+</span><span><a class="LN" name="168">  168   </a><span class="CT">	 * bits 92 downto 81</span>
+</span><span><a class="LN" name="169">  169   </a><span class="CT">	 * 	92..88 in rx[4] last 5 bits (from left)</span>
+</span><span><a class="LN" name="170">  170   </a><span class="CT">	 * 	87..81 in rx[5] first 7 bits (from left)</span>
+</span><span><a class="LN" name="171">  171   </a><span class="CT">	 */</span>
+</span><span><a class="LN" name="172">  172   </a>	idx = 0x1F &amp; rx[4];
+</span><span><a class="LN" name="173">  173   </a>	idx &lt;&lt;= 8;
+</span><span><a class="LN" name="174">  174   </a>	idx |= 0xFE &amp; rx[5];
+</span><span><a class="LN" name="175">  175   </a>	idx &gt;&gt;= 1;
+</span><span><a class="LN" name="176">  176   </a>
+</span><span><a class="LN" name="177">  177   </a>	<span class="KW">if</span> ((idx ^ spimcst-&gt;index_pos) &amp; SPIMC_INDEX_MASK) <b>{</b>
+</span><span><a class="LN" name="178">  178   </a>		idxdiff = (idx - spimcst-&gt;act_pos +
+</span><span><a class="LN" name="179">  179   </a>		           (1 &lt;&lt; (SPIMC_INDEX_BITS - 1))) &amp; SPIMC_INDEX_MASK;
+</span><span><a class="LN" name="180">  180   </a>		idxdiff -= 1 &lt;&lt; (SPIMC_INDEX_BITS - 1);
+</span><span><a class="LN" name="181">  181   </a>		idx = spimcst-&gt;act_pos + idxdiff;
+</span><span><a class="LN" name="182">  182   </a>		spimcst-&gt;index_pos = idx;
+</span><span><a class="LN" name="183">  183   </a>		spimcst-&gt;index_occur += 1;
+</span><span><a class="LN" name="184">  184   </a>	<b>}</b>
+</span><span><a class="LN" name="185">  185   </a>
+</span><span><a class="LN" name="186">  186   </a>	<span class="CT">/* current measurments count</span>
+</span><span><a class="LN" name="187">  187   </a><span class="CT">	 * bits 80 downto 72</span>
+</span><span><a class="LN" name="188">  188   </a><span class="CT">	 * bit 80 in rx[5]</span>
+</span><span><a class="LN" name="189">  189   </a><span class="CT">	 * bits 79..72 in rx[6]</span>
+</span><span><a class="LN" name="190">  190   </a><span class="CT">	 */</span>
+</span><span><a class="LN" name="191">  191   </a>
+</span><span><a class="LN" name="192">  192   </a>	spimcst-&gt;curadc_sqn = 0x01 &amp; rx[5];
+</span><span><a class="LN" name="193">  193   </a>	spimcst-&gt;curadc_sqn &lt;&lt;= 8;
+</span><span><a class="LN" name="194">  194   </a>	spimcst-&gt;curadc_sqn |= rx[6];
+</span><span><a class="LN" name="195">  195   </a>
+</span><span><a class="LN" name="196">  196   </a>
+</span><span><a class="LN" name="197">  197   </a>	<span class="CT">/** currents</span>
+</span><span><a class="LN" name="198">  198   </a><span class="CT">	 * ch2 - bits 71 downto 48</span>
+</span><span><a class="LN" name="199">  199   </a><span class="CT">	 * 	71..64 in rx[7] - all byte</span>
+</span><span><a class="LN" name="200">  200   </a><span class="CT">	 * 	63..56 in rx[8] - all byte</span>
+</span><span><a class="LN" name="201">  201   </a><span class="CT">	 * 	55..48 in rx[9] - all byte</span>
+</span><span><a class="LN" name="202">  202   </a><span class="CT">	 * ch0 - bits 47 downto 24</span>
+</span><span><a class="LN" name="203">  203   </a><span class="CT">	 * 	47..40 in rx[10] - all byte</span>
+</span><span><a class="LN" name="204">  204   </a><span class="CT">	 * 	39..32 in rx[11] - all byte</span>
+</span><span><a class="LN" name="205">  205   </a><span class="CT">	 * 	31..24 in rx[12] - all byte</span>
+</span><span><a class="LN" name="206">  206   </a><span class="CT">	 * ch1 - bits 23 downto 0</span>
+</span><span><a class="LN" name="207">  207   </a><span class="CT">	 * 	23..16 in rx[13] - all byte</span>
+</span><span><a class="LN" name="208">  208   </a><span class="CT">	 * 	15..8 in rx[14] - all byte</span>
+</span><span><a class="LN" name="209">  209   </a><span class="CT">	 * 	7..0 in rx[15] - all byte</span>
+</span><span><a class="LN" name="210">  210   </a><span class="CT">	 */</span>
+</span><span><a class="LN" name="211">  211   </a>
+</span><span><a class="LN" name="212">  212   </a>	spimcst-&gt;curadc_cumsum[2] = rx[7];
+</span><span><a class="LN" name="213">  213   </a>	spimcst-&gt;curadc_cumsum[2] &lt;&lt;= 8;
+</span><span><a class="LN" name="214">  214   </a>	spimcst-&gt;curadc_cumsum[2] |= rx[8];
+</span><span><a class="LN" name="215">  215   </a>	spimcst-&gt;curadc_cumsum[2] &lt;&lt;= 8;
+</span><span><a class="LN" name="216">  216   </a>	spimcst-&gt;curadc_cumsum[2] |= rx[9];
+</span><span><a class="LN" name="217">  217   </a>
+</span><span><a class="LN" name="218">  218   </a>	spimcst-&gt;curadc_cumsum[0] = rx[10];
+</span><span><a class="LN" name="219">  219   </a>	spimcst-&gt;curadc_cumsum[0] &lt;&lt;= 8;
+</span><span><a class="LN" name="220">  220   </a>	spimcst-&gt;curadc_cumsum[0] |= rx[11];
+</span><span><a class="LN" name="221">  221   </a>	spimcst-&gt;curadc_cumsum[0] &lt;&lt;= 8;
+</span><span><a class="LN" name="222">  222   </a>	spimcst-&gt;curadc_cumsum[0] |=rx [12];
+</span><span><a class="LN" name="223">  223   </a>
+</span><span><a class="LN" name="224">  224   </a>	spimcst-&gt;curadc_cumsum[1] = rx[13];
+</span><span><a class="LN" name="225">  225   </a>	spimcst-&gt;curadc_cumsum[1] &lt;&lt;= 8;
+</span><span><a class="LN" name="226">  226   </a>	spimcst-&gt;curadc_cumsum[1] |= rx[14];
+</span><span><a class="LN" name="227">  227   </a>	spimcst-&gt;curadc_cumsum[1] &lt;&lt;= 8;
+</span><span><a class="LN" name="228">  228   </a>	spimcst-&gt;curadc_cumsum[1] |= rx[15];
+</span><span><a class="LN" name="229">  229   </a>
+</span><span><a class="LN" name="230">  230   </a>	<span class="KW">return</span> 0;
+</span><span><a class="LN" name="231">  231   </a><b>}</b>
+</span><span><a class="LN" name="232">  232   </a>
+</span><span><a class="LN" name="233">  233   </a><span class="DT">int</span> <a name="fcn_spimc_init">spimc_init</a>(spimc_state_t *spimcst)
+</span><span><a class="LN" name="234">  234   </a><b>{</b>
+</span><span><a class="LN" name="235">  235   </a>	<span class="DT">int</span> ret = 0;
+</span><span><a class="LN" name="236">  236   </a>	<span class="DT">int</span> fd;
+</span><span><a class="LN" name="237">  237   </a>
+</span><span><a class="LN" name="238">  238   </a>	spimcst-&gt;spi_fd = -1;
+</span><span><a class="LN" name="239">  239   </a>
+</span><span><a class="LN" name="240">  240   </a>	fd = open(spimcst-&gt;spi_dev, O_RDWR);
+</span><span><a class="LN" name="241">  241   </a>	<span class="KW">if</span> (fd &lt; 0) <b>{</b>
+</span><span><a class="LN" name="242">  242   </a>		<a href="#fcn_pabort" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_pabort');" target="_self"><font color="#1122aa">pabort</font></a>(<font color="#1122ff">&quot;can't open device&quot;</font>);
+</span><span><a class="LN" name="243">  243   </a>	<b>}</b>
+</span><span><a class="LN" name="244">  244   </a>	printf(<font color="#1122ff">&quot;device open\n&quot;</font>);
+</span><span><a class="LN" name="245">  245   </a>	<span class="CT">/*</span>
+</span><span><a class="LN" name="246">  246   </a><span class="CT">	 * spi spimc_mode</span>
+</span><span><a class="LN" name="247">  247   </a><span class="CT">	 */</span>
+</span><span><a class="LN" name="248">  248   </a>	ret = ioctl(fd, SPI_IOC_WR_MODE, &amp;<a href="#var_spimc_mode" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_spimc_mode');" target="_self"><font color="#1122aa">spimc_mode</font></a>);
+</span><span><a class="LN" name="249">  249   </a>	<span class="KW">if</span> (ret == -1)
+</span><span><a class="LN" name="250">  250   </a>		<a href="#fcn_pabort" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_pabort');" target="_self"><font color="#1122aa">pabort</font></a>(<font color="#1122ff">&quot;can't set spi mode&quot;</font>);
+</span><span><a class="LN" name="251">  251   </a>
+</span><span><a class="LN" name="252">  252   </a>	ret = ioctl(fd, SPI_IOC_RD_MODE, &amp;<a href="#var_spimc_mode" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_spimc_mode');" target="_self"><font color="#1122aa">spimc_mode</font></a>);
+</span><span><a class="LN" name="253">  253   </a>	<span class="KW">if</span> (ret == -1)
+</span><span><a class="LN" name="254">  254   </a>		<a href="#fcn_pabort" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_pabort');" target="_self"><font color="#1122aa">pabort</font></a>(<font color="#1122ff">&quot;can't get spi mode&quot;</font>);
+</span><span><a class="LN" name="255">  255   </a>
+</span><span><a class="LN" name="256">  256   </a>	<span class="CT">/*</span>
+</span><span><a class="LN" name="257">  257   </a><span class="CT">	 * bits per word</span>
+</span><span><a class="LN" name="258">  258   </a><span class="CT">	 */</span>
+</span><span><a class="LN" name="259">  259   </a>	ret = ioctl(fd, SPI_IOC_WR_BITS_PER_WORD, &amp;<a href="#var_spimc_bits" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_spimc_bits');" target="_self"><font color="#1122aa">spimc_bits</font></a>);
+</span><span><a class="LN" name="260">  260   </a>	<span class="KW">if</span> (ret == -1)
+</span><span><a class="LN" name="261">  261   </a>		<a href="#fcn_pabort" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_pabort');" target="_self"><font color="#1122aa">pabort</font></a>(<font color="#1122ff">&quot;can't set bits per word&quot;</font>);
+</span><span><a class="LN" name="262">  262   </a>
+</span><span><a class="LN" name="263">  263   </a>	ret = ioctl(fd, SPI_IOC_RD_BITS_PER_WORD, &amp;<a href="#var_spimc_bits" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_spimc_bits');" target="_self"><font color="#1122aa">spimc_bits</font></a>);
+</span><span><a class="LN" name="264">  264   </a>	<span class="KW">if</span> (ret == -1)
+</span><span><a class="LN" name="265">  265   </a>		<a href="#fcn_pabort" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_pabort');" target="_self"><font color="#1122aa">pabort</font></a>(<font color="#1122ff">&quot;can't get bits per word&quot;</font>);
+</span><span><a class="LN" name="266">  266   </a>
+</span><span><a class="LN" name="267">  267   </a>	<span class="CT">/*</span>
+</span><span><a class="LN" name="268">  268   </a><span class="CT">	 * max spimc_speed hz</span>
+</span><span><a class="LN" name="269">  269   </a><span class="CT">	 */</span>
+</span><span><a class="LN" name="270">  270   </a>	ret = ioctl(fd, SPI_IOC_WR_MAX_SPEED_HZ, &amp;<a href="#var_spimc_speed" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_spimc_speed');" target="_self"><font color="#1122aa">spimc_speed</font></a>);
+</span><span><a class="LN" name="271">  271   </a>	<span class="KW">if</span> (ret == -1)
+</span><span><a class="LN" name="272">  272   </a>		<a href="#fcn_pabort" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_pabort');" target="_self"><font color="#1122aa">pabort</font></a>(<font color="#1122ff">&quot;can't set max speed hz&quot;</font>);
+</span><span><a class="LN" name="273">  273   </a>
+</span><span><a class="LN" name="274">  274   </a>	ret = ioctl(fd, SPI_IOC_RD_MAX_SPEED_HZ, &amp;<a href="#var_spimc_speed" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_spimc_speed');" target="_self"><font color="#1122aa">spimc_speed</font></a>);
+</span><span><a class="LN" name="275">  275   </a>	<span class="KW">if</span> (ret == -1)
+</span><span><a class="LN" name="276">  276   </a>		<a href="#fcn_pabort" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_pabort');" target="_self"><font color="#1122aa">pabort</font></a>(<font color="#1122ff">&quot;can't get max speed hz&quot;</font>);
+</span><span><a class="LN" name="277">  277   </a>
+</span><span><a class="LN" name="278">  278   </a>	printf(<font color="#1122ff">&quot;spi spimc_mode: %d\n&quot;</font>, <a href="#var_spimc_mode" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_spimc_mode');" target="_self"><font color="#1122aa">spimc_mode</font></a>);
+</span><span><a class="LN" name="279">  279   </a>	printf(<font color="#1122ff">&quot;bits per word: %d\n&quot;</font>, <a href="#var_spimc_bits" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_spimc_bits');" target="_self"><font color="#1122aa">spimc_bits</font></a>);
+</span><span><a class="LN" name="280">  280   </a>	printf(<font color="#1122ff">&quot;delay: %d\n&quot;</font>, <a href="#var_spimc_delay" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_spimc_delay');" target="_self"><font color="#1122aa">spimc_delay</font></a>);
+</span><span><a class="LN" name="281">  281   </a>	printf(<font color="#1122ff">&quot;max spimc_speed: %d Hz (%d KHz)\n&quot;</font>, <a href="#var_spimc_speed" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_spimc_speed');" target="_self"><font color="#1122aa">spimc_speed</font></a>, <a href="#var_spimc_speed" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_spimc_speed');" target="_self"><font color="#1122aa">spimc_speed</font></a>/1000);
+</span><span><a class="LN" name="282">  282   </a>
+</span><span><a class="LN" name="283">  283   </a>	spimcst-&gt;spi_fd = fd;
+</span><span><a class="LN" name="284">  284   </a>
+</span><span><a class="LN" name="285">  285   </a>	<span class="KW">return</span> ret;
+</span><span><a class="LN" name="286">  286   </a><b>}</b>
+</span><span><a class="LN" name="287">  287   </a>
+</span></pre>
+</td></tr></table>
+</p>
+</body>
+</html>

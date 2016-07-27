@@ -1,0 +1,87 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>RTW Report - SimpleGain.c</title>
+<style> .LN { font-style: italic; color: #888888 } </style>
+<style> .CT { font-style: italic; color: #117755 } </style>
+<style> .PP { font-style: bold;   color: #992211 } </style>
+<style> .KW { font-style: bold;   color: #112266 } </style>
+<style> .DT { font-style: bold;   color: #112266 } </style>
+<link rel="stylesheet" type="text/css" href="rtwreport.css"></link><script language="JavaScript" type="text/javascript" src="rtwreport_utils.js"></script>
+<SCRIPT type="text/javascript" src="rtwannotate.js"></SCRIPT>
+</head>
+<body bgcolor="#eeeeee" text="#1122aa" onload="try {if (top) { if (top.rtwFileOnLoad) top.rtwFileOnLoad(window.document); else local_onload();}} catch(err) {};if (typeof rtwannotate === 'function') {rtwannotate('SimpleGain_c_cov.xml');}">
+<p>
+<table border="0" cellspacing="0" cellpadding="6" width="100%%" height="100%%"><tr><td width="100%%" valign="top" bgcolor="#ffffff">
+<h4>File: <a href="../SimpleGain.c" target="rtwreport_document_frame" id="linkToText_plain">SimpleGain.c</a></h4>
+<pre id="RTWcode">
+<span><a class="LN" name="1">    1   </a><span class="CT">/*</span>
+</span><span><a class="LN" name="2">    2   </a><span class="CT"> * File: SimpleGain.c</span>
+</span><span><a class="LN" name="3">    3   </a><span class="CT"> *</span>
+</span><span><a class="LN" name="4">    4   </a><span class="CT"> * Code generated for Simulink model 'SimpleGain'.</span>
+</span><span><a class="LN" name="5">    5   </a><span class="CT"> *</span>
+</span><span><a class="LN" name="6">    6   </a><span class="CT"> * Model version                  : 1.8</span>
+</span><span><a class="LN" name="7">    7   </a><span class="CT"> * Simulink Coder version         : 8.6 (R2014a) 27-Dec-2013</span>
+</span><span><a class="LN" name="8">    8   </a><span class="CT"> * C/C++ source code generated on : Wed Apr 27 16:52:19 2016</span>
+</span><span><a class="LN" name="9">    9   </a><span class="CT"> *</span>
+</span><span><a class="LN" name="10">   10   </a><span class="CT"> * Target selection: ert_linux.tlc</span>
+</span><span><a class="LN" name="11">   11   </a><span class="CT"> * Embedded hardware selection: ARM Compatible-&gt;ARM Cortex</span>
+</span><span><a class="LN" name="12">   12   </a><span class="CT"> * Code generation objectives: Unspecified</span>
+</span><span><a class="LN" name="13">   13   </a><span class="CT"> * Validation result: Not run</span>
+</span><span><a class="LN" name="14">   14   </a><span class="CT"> */</span>
+</span><span><a class="LN" name="15">   15   </a>
+</span><span><a class="LN" name="16">   16   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&quot;SimpleGain.h&quot;</font>
+</span><span><a class="LN" name="17">   17   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&quot;SimpleGain_private.h&quot;</font>
+</span><span><a class="LN" name="18">   18   </a>
+</span><span><a class="LN" name="19">   19   </a><span class="CT">/* External inputs (root inport signals with auto storage) */</span>
+</span><span><a class="LN" name="20">   20   </a><a href="SimpleGain_h.html#type_ExtU_SimpleGain_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_ExtU_SimpleGain_T');" target="_self"><font color="#1122aa">ExtU_SimpleGain_T</font></a> <a name="var_SimpleGain_U">SimpleGain_U</a>;
+</span><span><a class="LN" name="21">   21   </a>
+</span><span><a class="LN" name="22">   22   </a><span class="CT">/* External outputs (root outports fed by signals with auto storage) */</span>
+</span><span><a class="LN" name="23">   23   </a><a href="SimpleGain_h.html#type_ExtY_SimpleGain_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_ExtY_SimpleGain_T');" target="_self"><font color="#1122aa">ExtY_SimpleGain_T</font></a> <a name="var_SimpleGain_Y">SimpleGain_Y</a>;
+</span><span><a class="LN" name="24">   24   </a>
+</span><span><a class="LN" name="25">   25   </a><span class="CT">/* Real-time model */</span>
+</span><span><a class="LN" name="26">   26   </a><a href="SimpleGain_types_h.html#type_RT_MODEL_SimpleGain_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_RT_MODEL_SimpleGain_T');" target="_self"><font color="#1122aa">RT_MODEL_SimpleGain_T</font></a> <a name="var_SimpleGain_M_">SimpleGain_M_</a>;
+</span><span><a class="LN" name="27">   27   </a><a href="SimpleGain_types_h.html#type_RT_MODEL_SimpleGain_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_RT_MODEL_SimpleGain_T');" target="_self"><font color="#1122aa">RT_MODEL_SimpleGain_T</font></a> *<span class="DT">const</span> <a name="var_SimpleGain_M">SimpleGain_M</a> = &amp;<a href="#var_SimpleGain_M_" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SimpleGain_M_');" target="_self"><font color="#1122aa">SimpleGain_M_</font></a>;
+</span><span><a class="LN" name="28">   28   </a>
+</span><span><a class="LN" name="29">   29   </a><span class="CT">/* Model step function */</span>
+</span><span><a class="LN" name="30">   30   </a><span class="DT">void</span> <a name="fcn_SimpleGain_step">SimpleGain_step</a>(<span class="DT">void</span>)
+</span><span><a class="LN" name="31">   31   </a><b>{</b>
+</span><span><a class="LN" name="32">   32   </a>  <span class="CT">/* Outport: '<a href="matlab:coder.internal.code2model('SimpleGain:3')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/Out1</i></font></a>' incorporates:</span>
+</span><span><a class="LN" name="33">   33   </a><span class="CT">   *  Gain: '<a href="matlab:coder.internal.code2model('SimpleGain:1')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/Gain</i></font></a>'</span>
+</span><span><a class="LN" name="34">   34   </a><span class="CT">   *  Inport: '<a href="matlab:coder.internal.code2model('SimpleGain:2')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/In1</i></font></a>'</span>
+</span><span><a class="LN" name="35">   35   </a><span class="CT">   */</span>
+</span><span><a class="LN" name="36">   36   </a>  <a href="#var_SimpleGain_Y" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SimpleGain_Y');" target="_self"><font color="#1122aa">SimpleGain_Y</font></a>.Out1 = <a href="SimpleGain_data_c.html#var_SimpleGain_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SimpleGain_P');" target="_self"><font color="#1122aa">SimpleGain_P</font></a>.Gain_Gain * <a href="#var_SimpleGain_U" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SimpleGain_U');" target="_self"><font color="#1122aa">SimpleGain_U</font></a>.In1;
+</span><span><a class="LN" name="37">   37   </a><b>}</b>
+</span><span><a class="LN" name="38">   38   </a>
+</span><span><a class="LN" name="39">   39   </a><span class="CT">/* Model initialize function */</span>
+</span><span><a class="LN" name="40">   40   </a><span class="DT">void</span> <a name="fcn_SimpleGain_initialize">SimpleGain_initialize</a>(<span class="DT">void</span>)
+</span><span><a class="LN" name="41">   41   </a><b>{</b>
+</span><span><a class="LN" name="42">   42   </a>  <span class="CT">/* Registration code */</span>
+</span><span><a class="LN" name="43">   43   </a>
+</span><span><a class="LN" name="44">   44   </a>  <span class="CT">/* initialize error status */</span>
+</span><span><a class="LN" name="45">   45   </a>  rtmSetErrorStatus(<a href="#var_SimpleGain_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SimpleGain_M');" target="_self"><font color="#1122aa">SimpleGain_M</font></a>, (NULL));
+</span><span><a class="LN" name="46">   46   </a>
+</span><span><a class="LN" name="47">   47   </a>  <span class="CT">/* external inputs */</span>
+</span><span><a class="LN" name="48">   48   </a>  <a href="#var_SimpleGain_U" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SimpleGain_U');" target="_self"><font color="#1122aa">SimpleGain_U</font></a>.In1 = 0.0;
+</span><span><a class="LN" name="49">   49   </a>
+</span><span><a class="LN" name="50">   50   </a>  <span class="CT">/* external outputs */</span>
+</span><span><a class="LN" name="51">   51   </a>  <a href="#var_SimpleGain_Y" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SimpleGain_Y');" target="_self"><font color="#1122aa">SimpleGain_Y</font></a>.Out1 = 0.0;
+</span><span><a class="LN" name="52">   52   </a><b>}</b>
+</span><span><a class="LN" name="53">   53   </a>
+</span><span><a class="LN" name="54">   54   </a><span class="CT">/* Model terminate function */</span>
+</span><span><a class="LN" name="55">   55   </a><span class="DT">void</span> <a name="fcn_SimpleGain_terminate">SimpleGain_terminate</a>(<span class="DT">void</span>)
+</span><span><a class="LN" name="56">   56   </a><b>{</b>
+</span><span><a class="LN" name="57">   57   </a>  <span class="CT">/* (no terminate code required) */</span>
+</span><span><a class="LN" name="58">   58   </a><b>}</b>
+</span><span><a class="LN" name="59">   59   </a>
+</span><span><a class="LN" name="60">   60   </a><span class="CT">/*</span>
+</span><span><a class="LN" name="61">   61   </a><span class="CT"> * File trailer for generated code.</span>
+</span><span><a class="LN" name="62">   62   </a><span class="CT"> *</span>
+</span><span><a class="LN" name="63">   63   </a><span class="CT"> * [EOF]</span>
+</span><span><a class="LN" name="64">   64   </a><span class="CT"> */</span>
+</span><span><a class="LN" name="65">   65   </a>
+</span></pre>
+</td></tr></table>
+</p>
+</body>
+</html>

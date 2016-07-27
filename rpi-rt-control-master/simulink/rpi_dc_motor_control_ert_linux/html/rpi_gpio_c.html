@@ -1,0 +1,158 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>RTW Report - rpi_gpio.c</title>
+<style> .LN { font-style: italic; color: #888888 } </style>
+<style> .CT { font-style: italic; color: #117755 } </style>
+<style> .PP { font-style: bold;   color: #992211 } </style>
+<style> .KW { font-style: bold;   color: #112266 } </style>
+<style> .DT { font-style: bold;   color: #112266 } </style>
+<link rel="stylesheet" type="text/css" href="rtwreport.css"></link><script language="JavaScript" type="text/javascript" src="rtwreport_utils.js"></script>
+<SCRIPT type="text/javascript" src="rtwannotate.js"></SCRIPT>
+</head>
+<body bgcolor="#eeeeee" text="#1122aa" onload="try {if (top) { if (top.rtwFileOnLoad) top.rtwFileOnLoad(window.document); else local_onload();}} catch(err) {};if (typeof rtwannotate === 'function') {rtwannotate('rpi_gpio_c_cov.xml');}">
+<p>
+<table border="0" cellspacing="0" cellpadding="6" width="100%%" height="100%%"><tr><td width="100%%" valign="top" bgcolor="#ffffff">
+<h4>File: <a href="../../rpi_gpio.c" target="rtwreport_document_frame" id="linkToText_plain">rpi_gpio.c</a></h4>
+<pre id="RTWcode">
+<span><a class="LN" name="1">    1   </a><span class="CT">/*</span>
+</span><span><a class="LN" name="2">    2   </a><span class="CT"> * Bidirectional pwm_base on Raspberry Pi module</span>
+</span><span><a class="LN" name="3">    3   </a><span class="CT"> *</span>
+</span><span><a class="LN" name="4">    4   </a><span class="CT"> * Copyright (C) 2014 Pavel Pisa &lt;pisa@cmp.felk.cvut.cz&gt;</span>
+</span><span><a class="LN" name="5">    5   </a><span class="CT"> * Copyright (C) 2014 Radek Meciar</span>
+</span><span><a class="LN" name="6">    6   </a><span class="CT"> *</span>
+</span><span><a class="LN" name="7">    7   </a><span class="CT"> * Department of Control Engineering</span>
+</span><span><a class="LN" name="8">    8   </a><span class="CT"> * Faculty of Electrical Engineering</span>
+</span><span><a class="LN" name="9">    9   </a><span class="CT"> * Czech Technical University in Prague (CTU)</span>
+</span><span><a class="LN" name="10">   10   </a><span class="CT"> *</span>
+</span><span><a class="LN" name="11">   11   </a><span class="CT"> * Next exception is granted in addition to GPL.</span>
+</span><span><a class="LN" name="12">   12   </a><span class="CT"> * Instantiating or linking compiled version of this code</span>
+</span><span><a class="LN" name="13">   13   </a><span class="CT"> * to produce an application image/executable, does not</span>
+</span><span><a class="LN" name="14">   14   </a><span class="CT"> * by itself cause the resulting application image/executable</span>
+</span><span><a class="LN" name="15">   15   </a><span class="CT"> * to be covered by the GNU General Public License.</span>
+</span><span><a class="LN" name="16">   16   </a><span class="CT"> * This exception does not however invalidate any other reasons</span>
+</span><span><a class="LN" name="17">   17   </a><span class="CT"> * why the executable file might be covered by the GNU Public License.</span>
+</span><span><a class="LN" name="18">   18   </a><span class="CT"> * Publication of enhanced or derived S-function files is required</span>
+</span><span><a class="LN" name="19">   19   </a><span class="CT"> * although.</span>
+</span><span><a class="LN" name="20">   20   </a><span class="CT"> */</span>
+</span><span><a class="LN" name="21">   21   </a>
+</span><span><a class="LN" name="22">   22   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&quot;rpi_gpio.h&quot;</font>
+</span><span><a class="LN" name="23">   23   </a>
+</span><span><a class="LN" name="24">   24   </a><span class="CT">/*Based on bachelor thesis work Meciar Radek: Motor control with Raspberry Pi board and Linux*/</span>
+</span><span><a class="LN" name="25">   25   </a>
+</span><span><a class="LN" name="26">   26   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&lt;fcntl.h&gt;</font>
+</span><span><a class="LN" name="27">   27   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&lt;sys/mman.h&gt;</font>
+</span><span><a class="LN" name="28">   28   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&lt;unistd.h&gt;</font>
+</span><span><a class="LN" name="29">   29   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&lt;errno.h&gt;</font>
+</span><span><a class="LN" name="30">   30   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&lt;stdint.h&gt;</font>
+</span><span><a class="LN" name="31">   31   </a>
+</span><span><a class="LN" name="32">   32   </a><font color="#992211">#</font><span class="PP">define</span> BASE		0x20000000		<span class="CT">/* registers common base address */</span>
+</span><span><a class="LN" name="33">   33   </a><font color="#992211">#</font><span class="PP">define</span> GPIO_BASE 	(BASE + 0x200000)	<span class="CT">/* gpio_base registers base address */</span>
+</span><span><a class="LN" name="34">   34   </a><font color="#992211">#</font><span class="PP">define</span> PWM_BASE	(BASE + 0x20C000)	<span class="CT">/* pwm_base registers base address */</span>
+</span><span><a class="LN" name="35">   35   </a><font color="#992211">#</font><span class="PP">define</span> CLK_BASE	(BASE + 0x101000)	<span class="CT">/* clk_base register base address */</span>
+</span><span><a class="LN" name="36">   36   </a>
+</span><span><a class="LN" name="37">   37   </a><font color="#992211">#</font><span class="PP">define</span> PAGE_SIZE 	(4*1024)
+</span><span><a class="LN" name="38">   38   </a><font color="#992211">#</font><span class="PP">define</span> BLOCK_SIZE	(4*1024)
+</span><span><a class="LN" name="39">   39   </a>
+</span><span><a class="LN" name="40">   40   </a>rpi_registers_mapping_t <a name="var_rpi_registers_mapping">rpi_registers_mapping</a>;
+</span><span><a class="LN" name="41">   41   </a>
+</span><span><a class="LN" name="42">   42   </a><span class="CT">/* Based on infromation from: http://elinux.org/RPi_Low-level_peripherals */</span>
+</span><span><a class="LN" name="43">   43   </a>
+</span><span><a class="LN" name="44">   44   </a><span class="DT">static</span> <span class="DT">int</span> <a name="fcn_rpi_gpio_fnc_setup">rpi_gpio_fnc_setup</a>(<span class="DT">unsigned</span> gpio, <span class="DT">unsigned</span> fnc)
+</span><span><a class="LN" name="45">   45   </a><b>{</b>
+</span><span><a class="LN" name="46">   46   </a>    <span class="DT">volatile</span> <span class="DT">unsigned</span> *reg;
+</span><span><a class="LN" name="47">   47   </a>    <span class="DT">unsigned</span> mask;
+</span><span><a class="LN" name="48">   48   </a>
+</span><span><a class="LN" name="49">   49   </a>    <span class="KW">if</span> (gpio &gt;= 32)
+</span><span><a class="LN" name="50">   50   </a>        <span class="KW">return</span> -1;
+</span><span><a class="LN" name="51">   51   </a>
+</span><span><a class="LN" name="52">   52   </a>    mask = 7 &lt;&lt; ((gpio % 10) * 3);
+</span><span><a class="LN" name="53">   53   </a>    fnc = fnc &lt;&lt; ((gpio % 10) * 3);
+</span><span><a class="LN" name="54">   54   </a>    fnc &amp;= mask;
+</span><span><a class="LN" name="55">   55   </a>    reg = <a href="#var_rpi_registers_mapping" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_registers_mapping');" target="_self"><font color="#1122aa">rpi_registers_mapping</font></a>.gpio_base + (gpio /10);
+</span><span><a class="LN" name="56">   56   </a>
+</span><span><a class="LN" name="57">   57   </a>    <span class="KW">if</span> ((*reg &amp; mask) != fnc) <b>{</b>
+</span><span><a class="LN" name="58">   58   </a>      *reg &amp;= ~mask;
+</span><span><a class="LN" name="59">   59   </a>      *reg |= fnc;
+</span><span><a class="LN" name="60">   60   </a>    <b>}</b>
+</span><span><a class="LN" name="61">   61   </a>    <span class="KW">return</span> 0;
+</span><span><a class="LN" name="62">   62   </a><b>}</b>
+</span><span><a class="LN" name="63">   63   </a>
+</span><span><a class="LN" name="64">   64   </a><span class="CT">/* Configure gpio_base pin for input */</span>
+</span><span><a class="LN" name="65">   65   </a><span class="DT">int</span> <a name="fcn_rpi_gpio_direction_input">rpi_gpio_direction_input</a>(<span class="DT">unsigned</span> gpio)
+</span><span><a class="LN" name="66">   66   </a><b>{</b>
+</span><span><a class="LN" name="67">   67   </a>    <span class="KW">return</span> <a href="#fcn_rpi_gpio_fnc_setup" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_rpi_gpio_fnc_setup');" target="_self"><font color="#1122aa">rpi_gpio_fnc_setup</font></a>(gpio, 0);
+</span><span><a class="LN" name="68">   68   </a><b>}</b>
+</span><span><a class="LN" name="69">   69   </a>
+</span><span><a class="LN" name="70">   70   </a><span class="CT">/* Configure gpio_base pin for output */</span>
+</span><span><a class="LN" name="71">   71   </a><span class="DT">int</span> <a name="fcn_rpi_gpio_direction_output">rpi_gpio_direction_output</a>(<span class="DT">unsigned</span> gpio, <span class="DT">int</span> value)
+</span><span><a class="LN" name="72">   72   </a><b>{</b>
+</span><span><a class="LN" name="73">   73   </a>    <span class="KW">if</span> (gpio &gt;= 32)
+</span><span><a class="LN" name="74">   74   </a>        <span class="KW">return</span> -1;
+</span><span><a class="LN" name="75">   75   </a>
+</span><span><a class="LN" name="76">   76   </a>    rpi_gpio_set_value(gpio, value);
+</span><span><a class="LN" name="77">   77   </a>    <span class="KW">if</span> (<a href="#fcn_rpi_gpio_fnc_setup" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_rpi_gpio_fnc_setup');" target="_self"><font color="#1122aa">rpi_gpio_fnc_setup</font></a>(gpio, 1) &lt; 0)
+</span><span><a class="LN" name="78">   78   </a>        <span class="KW">return</span> -1;
+</span><span><a class="LN" name="79">   79   </a>    rpi_gpio_set_value(gpio, value);
+</span><span><a class="LN" name="80">   80   </a>    <span class="KW">return</span> 0;
+</span><span><a class="LN" name="81">   81   </a><b>}</b>
+</span><span><a class="LN" name="82">   82   </a>
+</span><span><a class="LN" name="83">   83   </a><span class="CT">/* Configure gpio_base pin for alternate function */</span>
+</span><span><a class="LN" name="84">   84   </a><span class="DT">int</span> <a name="fcn_rpi_gpio_alt_fnc">rpi_gpio_alt_fnc</a>(<span class="DT">unsigned</span> gpio, <span class="DT">int</span> alt_fnc)
+</span><span><a class="LN" name="85">   85   </a><b>{</b>
+</span><span><a class="LN" name="86">   86   </a>    <span class="KW">return</span> <a href="#fcn_rpi_gpio_fnc_setup" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_rpi_gpio_fnc_setup');" target="_self"><font color="#1122aa">rpi_gpio_fnc_setup</font></a>(gpio, alt_fnc &lt;= 3? alt_fnc + 4: alt_fnc == 4? 3: 2);
+</span><span><a class="LN" name="87">   87   </a><b>}</b>
+</span><span><a class="LN" name="88">   88   </a>
+</span><span><a class="LN" name="89">   89   </a><span class="CT">/*</span>
+</span><span><a class="LN" name="90">   90   </a><span class="CT">peripheral_registers_map:</span>
+</span><span><a class="LN" name="91">   91   </a><span class="CT"></span>
+</span><span><a class="LN" name="92">   92   </a><span class="CT">Maps registers into virtual address space and sets  *gpio_base, *pwm_base, *clk_base poiners</span>
+</span><span><a class="LN" name="93">   93   </a><span class="CT">*/</span>
+</span><span><a class="LN" name="94">   94   </a><span class="DT">int</span> <a name="fcn_rpi_peripheral_registers_map">rpi_peripheral_registers_map</a>(<span class="DT">void</span>)
+</span><span><a class="LN" name="95">   95   </a><b>{</b>
+</span><span><a class="LN" name="96">   96   </a>    rpi_registers_mapping_t *rrmap = &amp;<a href="#var_rpi_registers_mapping" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_registers_mapping');" target="_self"><font color="#1122aa">rpi_registers_mapping</font></a>;
+</span><span><a class="LN" name="97">   97   </a>    <span class="KW">if</span> (rrmap-&gt;mapping_initialized)
+</span><span><a class="LN" name="98">   98   </a>        <span class="KW">return</span> rrmap-&gt;mapping_initialized;
+</span><span><a class="LN" name="99">   99   </a>
+</span><span><a class="LN" name="100">  100   </a>    rrmap-&gt;mapping_initialized = -1;
+</span><span><a class="LN" name="101">  101   </a>
+</span><span><a class="LN" name="102">  102   </a>    <span class="KW">if</span> ((rrmap-&gt;mem_fd = open(<font color="#1122ff">&quot;/dev/mem&quot;</font>, O_RDWR|O_SYNC) ) &lt; 0) <b>{</b>
+</span><span><a class="LN" name="103">  103   </a>        <span class="KW">return</span> -1;
+</span><span><a class="LN" name="104">  104   </a>    <b>}</b>
+</span><span><a class="LN" name="105">  105   </a>
+</span><span><a class="LN" name="106">  106   </a>    rrmap-&gt;gpio_map = mmap(NULL, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, rrmap-&gt;mem_fd, GPIO_BASE);
+</span><span><a class="LN" name="107">  107   </a>
+</span><span><a class="LN" name="108">  108   </a>    <span class="KW">if</span> (rrmap-&gt;gpio_map == MAP_FAILED) <b>{</b>
+</span><span><a class="LN" name="109">  109   </a>        <span class="KW">return</span> -1;
+</span><span><a class="LN" name="110">  110   </a>    <b>}</b>
+</span><span><a class="LN" name="111">  111   </a>
+</span><span><a class="LN" name="112">  112   </a>    rrmap-&gt;gpio_base = (<span class="DT">volatile</span> <span class="DT">unsigned</span> *)rrmap-&gt;gpio_map;
+</span><span><a class="LN" name="113">  113   </a>
+</span><span><a class="LN" name="114">  114   </a>    rrmap-&gt;pwm_map = mmap(NULL, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, rrmap-&gt;mem_fd, PWM_BASE);
+</span><span><a class="LN" name="115">  115   </a>
+</span><span><a class="LN" name="116">  116   </a>    <span class="KW">if</span> (rrmap-&gt;pwm_map == MAP_FAILED) <b>{</b>
+</span><span><a class="LN" name="117">  117   </a>        <span class="KW">return</span> -1;
+</span><span><a class="LN" name="118">  118   </a>    <b>}</b>
+</span><span><a class="LN" name="119">  119   </a>
+</span><span><a class="LN" name="120">  120   </a>    rrmap-&gt;pwm_base = (<span class="DT">volatile</span> <span class="DT">unsigned</span> *)rrmap-&gt;pwm_map;
+</span><span><a class="LN" name="121">  121   </a>
+</span><span><a class="LN" name="122">  122   </a>    rrmap-&gt;clk_map = mmap(NULL, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, rrmap-&gt;mem_fd, CLK_BASE);
+</span><span><a class="LN" name="123">  123   </a>
+</span><span><a class="LN" name="124">  124   </a>    <span class="KW">if</span> (rrmap-&gt;clk_map == MAP_FAILED) <b>{</b>
+</span><span><a class="LN" name="125">  125   </a>        <span class="KW">return</span> -1;
+</span><span><a class="LN" name="126">  126   </a>    <b>}</b>
+</span><span><a class="LN" name="127">  127   </a>
+</span><span><a class="LN" name="128">  128   </a>    rrmap-&gt;clk_base = (<span class="DT">volatile</span> <span class="DT">unsigned</span> *)rrmap-&gt;clk_map;
+</span><span><a class="LN" name="129">  129   </a>
+</span><span><a class="LN" name="130">  130   </a>    close(rrmap-&gt;mem_fd);
+</span><span><a class="LN" name="131">  131   </a>
+</span><span><a class="LN" name="132">  132   </a>    rrmap-&gt;mapping_initialized = 1;
+</span><span><a class="LN" name="133">  133   </a>
+</span><span><a class="LN" name="134">  134   </a>    <span class="KW">return</span> rrmap-&gt;mapping_initialized;
+</span><span><a class="LN" name="135">  135   </a><b>}</b> <span class="CT">/* peripheral_registers_map */</span>
+</span><span><a class="LN" name="136">  136   </a>
+</span></pre>
+</td></tr></table>
+</p>
+</body>
+</html>

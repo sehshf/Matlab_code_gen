@@ -1,0 +1,425 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>RTW Report - rpi_dc_motor_control.h</title>
+<style> .LN { font-style: italic; color: #888888 } </style>
+<style> .CT { font-style: italic; color: #117755 } </style>
+<style> .PP { font-style: bold;   color: #992211 } </style>
+<style> .KW { font-style: bold;   color: #112266 } </style>
+<style> .DT { font-style: bold;   color: #112266 } </style>
+<link rel="stylesheet" type="text/css" href="rtwreport.css"></link><script language="JavaScript" type="text/javascript" src="rtwreport_utils.js"></script>
+<SCRIPT type="text/javascript" src="rtwannotate.js"></SCRIPT>
+</head>
+<body bgcolor="#eeeeee" text="#1122aa" onload="try {if (top) { if (top.rtwFileOnLoad) top.rtwFileOnLoad(window.document); else local_onload();}} catch(err) {};if (typeof rtwannotate === 'function') {rtwannotate('rpi_dc_motor_control_h_cov.xml');}">
+<p>
+<table border="0" cellspacing="0" cellpadding="6" width="100%%" height="100%%"><tr><td width="100%%" valign="top" bgcolor="#ffffff">
+<h4>File: <a href="../rpi_dc_motor_control.h" target="rtwreport_document_frame" id="linkToText_plain">rpi_dc_motor_control.h</a></h4>
+<pre id="RTWcode">
+<span><a class="LN" name="1">    1   </a><span class="CT">/*</span>
+</span><span><a class="LN" name="2">    2   </a><span class="CT"> * File: rpi_dc_motor_control.h</span>
+</span><span><a class="LN" name="3">    3   </a><span class="CT"> *</span>
+</span><span><a class="LN" name="4">    4   </a><span class="CT"> * Code generated for Simulink model 'rpi_dc_motor_control'.</span>
+</span><span><a class="LN" name="5">    5   </a><span class="CT"> *</span>
+</span><span><a class="LN" name="6">    6   </a><span class="CT"> * Model version                  : 1.160</span>
+</span><span><a class="LN" name="7">    7   </a><span class="CT"> * Simulink Coder version         : 8.6 (R2014a) 27-Dec-2013</span>
+</span><span><a class="LN" name="8">    8   </a><span class="CT"> * C/C++ source code generated on : Wed Apr 27 14:15:09 2016</span>
+</span><span><a class="LN" name="9">    9   </a><span class="CT"> *</span>
+</span><span><a class="LN" name="10">   10   </a><span class="CT"> * Target selection: ert_linux.tlc</span>
+</span><span><a class="LN" name="11">   11   </a><span class="CT"> * Embedded hardware selection: Intel-&gt;x86-64</span>
+</span><span><a class="LN" name="12">   12   </a><span class="CT"> * Code generation objectives: Unspecified</span>
+</span><span><a class="LN" name="13">   13   </a><span class="CT"> * Validation result: Not run</span>
+</span><span><a class="LN" name="14">   14   </a><span class="CT"> */</span>
+</span><span><a class="LN" name="15">   15   </a>
+</span><span><a class="LN" name="16">   16   </a><font color="#992211">#</font><span class="PP">ifndef</span> RTW_HEADER_rpi_dc_motor_control_h_
+</span><span><a class="LN" name="17">   17   </a><font color="#992211">#</font><span class="PP">define</span> RTW_HEADER_rpi_dc_motor_control_h_
+</span><span><a class="LN" name="18">   18   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&lt;stddef.h&gt;</font>
+</span><span><a class="LN" name="19">   19   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&lt;string.h&gt;</font>
+</span><span><a class="LN" name="20">   20   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&lt;math.h&gt;</font>
+</span><span><a class="LN" name="21">   21   </a><font color="#992211">#</font><span class="PP">ifndef</span> rpi_dc_motor_control_COMMON_INCLUDES_
+</span><span><a class="LN" name="22">   22   </a><font color="#992211">#</font> <span class="PP">define</span> rpi_dc_motor_control_COMMON_INCLUDES_
+</span><span><a class="LN" name="23">   23   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&quot;rtwtypes.h&quot;</font>
+</span><span><a class="LN" name="24">   24   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&quot;simstruc.h&quot;</font>
+</span><span><a class="LN" name="25">   25   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&quot;fixedpoint.h&quot;</font>
+</span><span><a class="LN" name="26">   26   </a><font color="#992211">#</font><span class="PP">endif</span>                                 <span class="CT">/* rpi_dc_motor_control_COMMON_INCLUDES_ */</span>
+</span><span><a class="LN" name="27">   27   </a>
+</span><span><a class="LN" name="28">   28   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&quot;rpi_dc_motor_control_types.h&quot;</font>
+</span><span><a class="LN" name="29">   29   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&quot;rt_nonfinite.h&quot;</font>
+</span><span><a class="LN" name="30">   30   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&quot;rtGetInf.h&quot;</font>
+</span><span><a class="LN" name="31">   31   </a>
+</span><span><a class="LN" name="32">   32   </a><span class="CT">/* Macros for accessing real-time model data structure */</span>
+</span><span><a class="LN" name="33">   33   </a><font color="#992211">#</font><span class="PP">ifndef</span> rtmGetBlkStateChangeFlag
+</span><span><a class="LN" name="34">   34   </a><font color="#992211">#</font> <span class="PP">define</span> rtmGetBlkStateChangeFlag(rtm) ((rtm)-&gt;ModelData.blkStateChange)
+</span><span><a class="LN" name="35">   35   </a><font color="#992211">#</font><span class="PP">endif</span>
+</span><span><a class="LN" name="36">   36   </a>
+</span><span><a class="LN" name="37">   37   </a><font color="#992211">#</font><span class="PP">ifndef</span> rtmSetBlkStateChangeFlag
+</span><span><a class="LN" name="38">   38   </a><font color="#992211">#</font> <span class="PP">define</span> rtmSetBlkStateChangeFlag(rtm, val) ((rtm)-&gt;ModelData.blkStateChange = (val))
+</span><span><a class="LN" name="39">   39   </a><font color="#992211">#</font><span class="PP">endif</span>
+</span><span><a class="LN" name="40">   40   </a>
+</span><span><a class="LN" name="41">   41   </a><font color="#992211">#</font><span class="PP">ifndef</span> rtmGetDerivCacheNeedsReset
+</span><span><a class="LN" name="42">   42   </a><font color="#992211">#</font> <span class="PP">define</span> rtmGetDerivCacheNeedsReset(rtm) ((rtm)-&gt;ModelData.derivCacheNeedsReset)
+</span><span><a class="LN" name="43">   43   </a><font color="#992211">#</font><span class="PP">endif</span>
+</span><span><a class="LN" name="44">   44   </a>
+</span><span><a class="LN" name="45">   45   </a><font color="#992211">#</font><span class="PP">ifndef</span> rtmSetDerivCacheNeedsReset
+</span><span><a class="LN" name="46">   46   </a><font color="#992211">#</font> <span class="PP">define</span> rtmSetDerivCacheNeedsReset(rtm, val) ((rtm)-&gt;ModelData.derivCacheNeedsReset = (val))
+</span><span><a class="LN" name="47">   47   </a><font color="#992211">#</font><span class="PP">endif</span>
+</span><span><a class="LN" name="48">   48   </a>
+</span><span><a class="LN" name="49">   49   </a><font color="#992211">#</font><span class="PP">ifndef</span> rtmGetFinalTime
+</span><span><a class="LN" name="50">   50   </a><font color="#992211">#</font> <span class="PP">define</span> rtmGetFinalTime(rtm)          ((rtm)-&gt;Timing.tFinal)
+</span><span><a class="LN" name="51">   51   </a><font color="#992211">#</font><span class="PP">endif</span>
+</span><span><a class="LN" name="52">   52   </a>
+</span><span><a class="LN" name="53">   53   </a><font color="#992211">#</font><span class="PP">ifndef</span> rtmGetSampleHitArray
+</span><span><a class="LN" name="54">   54   </a><font color="#992211">#</font> <span class="PP">define</span> rtmGetSampleHitArray(rtm)     ((rtm)-&gt;Timing.sampleHitArray)
+</span><span><a class="LN" name="55">   55   </a><font color="#992211">#</font><span class="PP">endif</span>
+</span><span><a class="LN" name="56">   56   </a>
+</span><span><a class="LN" name="57">   57   </a><font color="#992211">#</font><span class="PP">ifndef</span> rtmGetStepSize
+</span><span><a class="LN" name="58">   58   </a><font color="#992211">#</font> <span class="PP">define</span> rtmGetStepSize(rtm)           ((rtm)-&gt;Timing.stepSize)
+</span><span><a class="LN" name="59">   59   </a><font color="#992211">#</font><span class="PP">endif</span>
+</span><span><a class="LN" name="60">   60   </a>
+</span><span><a class="LN" name="61">   61   </a><font color="#992211">#</font><span class="PP">ifndef</span> rtmGetZCCacheNeedsReset
+</span><span><a class="LN" name="62">   62   </a><font color="#992211">#</font> <span class="PP">define</span> rtmGetZCCacheNeedsReset(rtm)  ((rtm)-&gt;ModelData.zCCacheNeedsReset)
+</span><span><a class="LN" name="63">   63   </a><font color="#992211">#</font><span class="PP">endif</span>
+</span><span><a class="LN" name="64">   64   </a>
+</span><span><a class="LN" name="65">   65   </a><font color="#992211">#</font><span class="PP">ifndef</span> rtmSetZCCacheNeedsReset
+</span><span><a class="LN" name="66">   66   </a><font color="#992211">#</font> <span class="PP">define</span> rtmSetZCCacheNeedsReset(rtm, val) ((rtm)-&gt;ModelData.zCCacheNeedsReset = (val))
+</span><span><a class="LN" name="67">   67   </a><font color="#992211">#</font><span class="PP">endif</span>
+</span><span><a class="LN" name="68">   68   </a>
+</span><span><a class="LN" name="69">   69   </a><font color="#992211">#</font><span class="PP">ifndef</span> rtmGet_TimeOfLastOutput
+</span><span><a class="LN" name="70">   70   </a><font color="#992211">#</font> <span class="PP">define</span> rtmGet_TimeOfLastOutput(rtm)  ((rtm)-&gt;Timing.timeOfLastOutput)
+</span><span><a class="LN" name="71">   71   </a><font color="#992211">#</font><span class="PP">endif</span>
+</span><span><a class="LN" name="72">   72   </a>
+</span><span><a class="LN" name="73">   73   </a><font color="#992211">#</font><span class="PP">ifndef</span> rtmGetErrorStatus
+</span><span><a class="LN" name="74">   74   </a><font color="#992211">#</font> <span class="PP">define</span> rtmGetErrorStatus(rtm)        ((rtm)-&gt;errorStatus)
+</span><span><a class="LN" name="75">   75   </a><font color="#992211">#</font><span class="PP">endif</span>
+</span><span><a class="LN" name="76">   76   </a>
+</span><span><a class="LN" name="77">   77   </a><font color="#992211">#</font><span class="PP">ifndef</span> rtmSetErrorStatus
+</span><span><a class="LN" name="78">   78   </a><font color="#992211">#</font> <span class="PP">define</span> rtmSetErrorStatus(rtm, val)   ((rtm)-&gt;errorStatus = (val))
+</span><span><a class="LN" name="79">   79   </a><font color="#992211">#</font><span class="PP">endif</span>
+</span><span><a class="LN" name="80">   80   </a>
+</span><span><a class="LN" name="81">   81   </a><font color="#992211">#</font><span class="PP">ifndef</span> rtmGetStopRequested
+</span><span><a class="LN" name="82">   82   </a><font color="#992211">#</font> <span class="PP">define</span> rtmGetStopRequested(rtm)      ((rtm)-&gt;Timing.stopRequestedFlag)
+</span><span><a class="LN" name="83">   83   </a><font color="#992211">#</font><span class="PP">endif</span>
+</span><span><a class="LN" name="84">   84   </a>
+</span><span><a class="LN" name="85">   85   </a><font color="#992211">#</font><span class="PP">ifndef</span> rtmSetStopRequested
+</span><span><a class="LN" name="86">   86   </a><font color="#992211">#</font> <span class="PP">define</span> rtmSetStopRequested(rtm, val) ((rtm)-&gt;Timing.stopRequestedFlag = (val))
+</span><span><a class="LN" name="87">   87   </a><font color="#992211">#</font><span class="PP">endif</span>
+</span><span><a class="LN" name="88">   88   </a>
+</span><span><a class="LN" name="89">   89   </a><font color="#992211">#</font><span class="PP">ifndef</span> rtmGetStopRequestedPtr
+</span><span><a class="LN" name="90">   90   </a><font color="#992211">#</font> <span class="PP">define</span> rtmGetStopRequestedPtr(rtm)   (&amp;((rtm)-&gt;Timing.stopRequestedFlag))
+</span><span><a class="LN" name="91">   91   </a><font color="#992211">#</font><span class="PP">endif</span>
+</span><span><a class="LN" name="92">   92   </a>
+</span><span><a class="LN" name="93">   93   </a><font color="#992211">#</font><span class="PP">ifndef</span> rtmGetT
+</span><span><a class="LN" name="94">   94   </a><font color="#992211">#</font> <span class="PP">define</span> rtmGetT(rtm)                  (rtmGetTPtr((rtm))[0])
+</span><span><a class="LN" name="95">   95   </a><font color="#992211">#</font><span class="PP">endif</span>
+</span><span><a class="LN" name="96">   96   </a>
+</span><span><a class="LN" name="97">   97   </a><font color="#992211">#</font><span class="PP">ifndef</span> rtmGetTFinal
+</span><span><a class="LN" name="98">   98   </a><font color="#992211">#</font> <span class="PP">define</span> rtmGetTFinal(rtm)             ((rtm)-&gt;Timing.tFinal)
+</span><span><a class="LN" name="99">   99   </a><font color="#992211">#</font><span class="PP">endif</span>
+</span><span><a class="LN" name="100">  100   </a>
+</span><span><a class="LN" name="101">  101   </a><font color="#992211">#</font><span class="PP">ifndef</span> rtmGetTStart
+</span><span><a class="LN" name="102">  102   </a><font color="#992211">#</font> <span class="PP">define</span> rtmGetTStart(rtm)             ((rtm)-&gt;Timing.tStart)
+</span><span><a class="LN" name="103">  103   </a><font color="#992211">#</font><span class="PP">endif</span>
+</span><span><a class="LN" name="104">  104   </a>
+</span><span><a class="LN" name="105">  105   </a><font color="#992211">#</font><span class="PP">ifndef</span> rtmGetTimeOfLastOutput
+</span><span><a class="LN" name="106">  106   </a><font color="#992211">#</font> <span class="PP">define</span> rtmGetTimeOfLastOutput(rtm)   ((rtm)-&gt;Timing.timeOfLastOutput)
+</span><span><a class="LN" name="107">  107   </a><font color="#992211">#</font><span class="PP">endif</span>
+</span><span><a class="LN" name="108">  108   </a>
+</span><span><a class="LN" name="109">  109   </a><span class="CT">/* Block signals (auto storage) */</span>
+</span><span><a class="LN" name="110">  110   </a><span class="KW">typedef</span> <span class="KW">struct</span> <b>{</b>
+</span><span><a class="LN" name="111">  111   </a>  real_T ManualPWMControl;             <span class="CT">/* '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:427')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/Manual PWM Control</i></font></a>' */</span>
+</span><span><a class="LN" name="112">  112   </a>  real_T In;                           <span class="CT">/* '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:486:1')" name="code2model"><font color="#117755"><i>&lt;S3&gt;/In</i></font></a>' */</span>
+</span><span><a class="LN" name="113">  113   </a>  int32_T IRC0;                        <span class="CT">/* '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:392')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/IRC0</i></font></a>' */</span>
+</span><span><a class="LN" name="114">  114   </a>  uint8_T Toint;                       <span class="CT">/* '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:469')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/To int</i></font></a>' */</span>
+</span><span><a class="LN" name="115">  115   </a><b>}</b> <a name="type_BlockIO_rpi_dc_motor_control">BlockIO_rpi_dc_motor_control</a>;
+</span><span><a class="LN" name="116">  116   </a>
+</span><span><a class="LN" name="117">  117   </a><span class="CT">/* Block states (auto storage) for system '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control')" name="code2model"><font color="#117755"><i>&lt;Root&gt;</i></font></a>' */</span>
+</span><span><a class="LN" name="118">  118   </a><span class="KW">typedef</span> <span class="KW">struct</span> <b>{</b>
+</span><span><a class="LN" name="119">  119   </a>  real_T Int1_DSTATE;                  <span class="CT">/* '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:453')" name="code2model"><font color="#117755"><i>&lt;S1&gt;/Int1</i></font></a>' */</span>
+</span><span><a class="LN" name="120">  120   </a>  real_T UnitDelay_DSTATE;             <span class="CT">/* '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:458')" name="code2model"><font color="#117755"><i>&lt;S1&gt;/Unit Delay</i></font></a>' */</span>
+</span><span><a class="LN" name="121">  121   </a>  real_T Memory_PreviousInput;         <span class="CT">/* '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:489')" name="code2model"><font color="#117755"><i>&lt;S2&gt;/Memory</i></font></a>' */</span>
+</span><span><a class="LN" name="122">  122   </a>  real_T PWMwDir_RWORK;                <span class="CT">/* '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:425')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/PWMwDir</i></font></a>' */</span>
+</span><span><a class="LN" name="123">  123   </a>  int_T PWMwDir_IWORK[5];              <span class="CT">/* '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:425')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/PWMwDir</i></font></a>' */</span>
+</span><span><a class="LN" name="124">  124   </a>  int_T IRC0_IWORK[8];                 <span class="CT">/* '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:392')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/IRC0</i></font></a>' */</span>
+</span><span><a class="LN" name="125">  125   </a>  int8_T Int1_PrevResetState;          <span class="CT">/* '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:453')" name="code2model"><font color="#117755"><i>&lt;S1&gt;/Int1</i></font></a>' */</span>
+</span><span><a class="LN" name="126">  126   </a><b>}</b> <a name="type_D_Work_rpi_dc_motor_control">D_Work_rpi_dc_motor_control</a>;
+</span><span><a class="LN" name="127">  127   </a>
+</span><span><a class="LN" name="128">  128   </a><span class="CT">/* Parameters (auto storage) */</span>
+</span><span><a class="LN" name="129">  129   </a><span class="KW">struct</span> Parameters_rpi_dc_motor_control_ <b>{</b>
+</span><span><a class="LN" name="130">  130   </a>  real_T SubsysPSD_D;                  <span class="CT">/* Mask Parameter: SubsysPSD_D</span>
+</span><span><a class="LN" name="131">  131   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:450')" name="code2model"><font color="#117755"><i>&lt;S1&gt;/  Derivative</i></font></a>'</span>
+</span><span><a class="LN" name="132">  132   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="133">  133   </a>  real_T SubsysPSD_I;                  <span class="CT">/* Mask Parameter: SubsysPSD_I</span>
+</span><span><a class="LN" name="134">  134   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:454')" name="code2model"><font color="#117755"><i>&lt;S1&gt;/Integrative</i></font></a>'</span>
+</span><span><a class="LN" name="135">  135   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="136">  136   </a>  real_T SubsysPSD_P;                  <span class="CT">/* Mask Parameter: SubsysPSD_P</span>
+</span><span><a class="LN" name="137">  137   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:455')" name="code2model"><font color="#117755"><i>&lt;S1&gt;/Proportional</i></font></a>'</span>
+</span><span><a class="LN" name="138">  138   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="139">  139   </a>  real_T _Y0;                          <span class="CT">/* Expression: 0</span>
+</span><span><a class="LN" name="140">  140   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:486:3')" name="code2model"><font color="#117755"><i>&lt;S3&gt;/ </i></font></a>'</span>
+</span><span><a class="LN" name="141">  141   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="142">  142   </a>  real_T PWMwDir_P1_Size[2];           <span class="CT">/* Computed Parameter: PWMwDir_P1_Size</span>
+</span><span><a class="LN" name="143">  143   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:425')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/PWMwDir</i></font></a>'</span>
+</span><span><a class="LN" name="144">  144   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="145">  145   </a>  real_T PWMwDir_P1;                   <span class="CT">/* Expression: chn-1</span>
+</span><span><a class="LN" name="146">  146   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:425')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/PWMwDir</i></font></a>'</span>
+</span><span><a class="LN" name="147">  147   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="148">  148   </a>  real_T PWMwDir_P2_Size[2];           <span class="CT">/* Computed Parameter: PWMwDir_P2_Size</span>
+</span><span><a class="LN" name="149">  149   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:425')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/PWMwDir</i></font></a>'</span>
+</span><span><a class="LN" name="150">  150   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="151">  151   </a>  real_T PWMwDir_P2;                   <span class="CT">/* Expression: pwm_freq</span>
+</span><span><a class="LN" name="152">  152   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:425')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/PWMwDir</i></font></a>'</span>
+</span><span><a class="LN" name="153">  153   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="154">  154   </a>  real_T PWMwDir_P3_Size[2];           <span class="CT">/* Computed Parameter: PWMwDir_P3_Size</span>
+</span><span><a class="LN" name="155">  155   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:425')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/PWMwDir</i></font></a>'</span>
+</span><span><a class="LN" name="156">  156   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="157">  157   </a>  real_T PWMwDir_P3;                   <span class="CT">/* Expression: dir_do_bit-1</span>
+</span><span><a class="LN" name="158">  158   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:425')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/PWMwDir</i></font></a>'</span>
+</span><span><a class="LN" name="159">  159   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="160">  160   </a>  real_T RESET_Value;                  <span class="CT">/* Expression: 0</span>
+</span><span><a class="LN" name="161">  161   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:464')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/  RESET</i></font></a>'</span>
+</span><span><a class="LN" name="162">  162   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="163">  163   </a>  real_T PositionRequest_Value;        <span class="CT">/* Expression: 0</span>
+</span><span><a class="LN" name="164">  164   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:462')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/Position Request</i></font></a>'</span>
+</span><span><a class="LN" name="165">  165   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="166">  166   </a>  real_T Memory_X0;                    <span class="CT">/* Expression: 0</span>
+</span><span><a class="LN" name="167">  167   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:489')" name="code2model"><font color="#117755"><i>&lt;S2&gt;/Memory</i></font></a>'</span>
+</span><span><a class="LN" name="168">  168   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="169">  169   </a>  real_T Periodtime_Value;             <span class="CT">/* Expression: 8</span>
+</span><span><a class="LN" name="170">  170   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:482')" name="code2model"><font color="#117755"><i>&lt;S2&gt;/Period time</i></font></a>'</span>
+</span><span><a class="LN" name="171">  171   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="172">  172   </a>  real_T DLookupTable_tableData[6];    <span class="CT">/* Expression: [0 2000 500 500 0    0]</span>
+</span><span><a class="LN" name="173">  173   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:483')" name="code2model"><font color="#117755"><i>&lt;S2&gt;/1-D Lookup Table</i></font></a>'</span>
+</span><span><a class="LN" name="174">  174   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="175">  175   </a>  real_T DLookupTable_bp01Data[6];     <span class="CT">/* Expression: [0 3      5     6     6.1 8]</span>
+</span><span><a class="LN" name="176">  176   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:483')" name="code2model"><font color="#117755"><i>&lt;S2&gt;/1-D Lookup Table</i></font></a>'</span>
+</span><span><a class="LN" name="177">  177   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="178">  178   </a>  real_T IRC0_P1_Size[2];              <span class="CT">/* Computed Parameter: IRC0_P1_Size</span>
+</span><span><a class="LN" name="179">  179   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:392')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/IRC0</i></font></a>'</span>
+</span><span><a class="LN" name="180">  180   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="181">  181   </a>  real_T IRC0_P1;                      <span class="CT">/* Expression: Ts</span>
+</span><span><a class="LN" name="182">  182   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:392')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/IRC0</i></font></a>'</span>
+</span><span><a class="LN" name="183">  183   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="184">  184   </a>  real_T IRC0_P2_Size[2];              <span class="CT">/* Computed Parameter: IRC0_P2_Size</span>
+</span><span><a class="LN" name="185">  185   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:392')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/IRC0</i></font></a>'</span>
+</span><span><a class="LN" name="186">  186   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="187">  187   </a>  real_T IRC0_P2;                      <span class="CT">/* Expression: chn-1</span>
+</span><span><a class="LN" name="188">  188   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:392')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/IRC0</i></font></a>'</span>
+</span><span><a class="LN" name="189">  189   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="190">  190   </a>  real_T IRC0_P3_Size[2];              <span class="CT">/* Computed Parameter: IRC0_P3_Size</span>
+</span><span><a class="LN" name="191">  191   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:392')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/IRC0</i></font></a>'</span>
+</span><span><a class="LN" name="192">  192   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="193">  193   </a>  real_T IRC0_P3;                      <span class="CT">/* Expression: mode-1</span>
+</span><span><a class="LN" name="194">  194   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:392')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/IRC0</i></font></a>'</span>
+</span><span><a class="LN" name="195">  195   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="196">  196   </a>  real_T IRC0_P4_Size[2];              <span class="CT">/* Computed Parameter: IRC0_P4_Size</span>
+</span><span><a class="LN" name="197">  197   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:392')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/IRC0</i></font></a>'</span>
+</span><span><a class="LN" name="198">  198   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="199">  199   </a>  real_T IRC0_P4;                      <span class="CT">/* Expression: gating-2</span>
+</span><span><a class="LN" name="200">  200   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:392')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/IRC0</i></font></a>'</span>
+</span><span><a class="LN" name="201">  201   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="202">  202   </a>  real_T IRC0_P5_Size[2];              <span class="CT">/* Computed Parameter: IRC0_P5_Size</span>
+</span><span><a class="LN" name="203">  203   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:392')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/IRC0</i></font></a>'</span>
+</span><span><a class="LN" name="204">  204   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="205">  205   </a>  real_T IRC0_P5;                      <span class="CT">/* Expression: resetctrl-2</span>
+</span><span><a class="LN" name="206">  206   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:392')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/IRC0</i></font></a>'</span>
+</span><span><a class="LN" name="207">  207   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="208">  208   </a>  real_T IRC0_P6_Size[2];              <span class="CT">/* Computed Parameter: IRC0_P6_Size</span>
+</span><span><a class="LN" name="209">  209   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:392')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/IRC0</i></font></a>'</span>
+</span><span><a class="LN" name="210">  210   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="211">  211   </a>  real_T IRC0_P6;                      <span class="CT">/* Expression: digfilter</span>
+</span><span><a class="LN" name="212">  212   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:392')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/IRC0</i></font></a>'</span>
+</span><span><a class="LN" name="213">  213   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="214">  214   </a>  real_T IRC0_P7_Size[2];              <span class="CT">/* Computed Parameter: IRC0_P7_Size</span>
+</span><span><a class="LN" name="215">  215   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:392')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/IRC0</i></font></a>'</span>
+</span><span><a class="LN" name="216">  216   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="217">  217   </a>  real_T IRC0_P7;                      <span class="CT">/* Expression: reset_at_startup</span>
+</span><span><a class="LN" name="218">  218   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:392')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/IRC0</i></font></a>'</span>
+</span><span><a class="LN" name="219">  219   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="220">  220   </a>  real_T Int1_gainval;                 <span class="CT">/* Computed Parameter: Int1_gainval</span>
+</span><span><a class="LN" name="221">  221   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:453')" name="code2model"><font color="#117755"><i>&lt;S1&gt;/Int1</i></font></a>'</span>
+</span><span><a class="LN" name="222">  222   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="223">  223   </a>  real_T Int1_IC;                      <span class="CT">/* Expression: 0</span>
+</span><span><a class="LN" name="224">  224   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:453')" name="code2model"><font color="#117755"><i>&lt;S1&gt;/Int1</i></font></a>'</span>
+</span><span><a class="LN" name="225">  225   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="226">  226   </a>  real_T UnitDelay_InitialCondition;   <span class="CT">/* Expression: 0</span>
+</span><span><a class="LN" name="227">  227   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:458')" name="code2model"><font color="#117755"><i>&lt;S1&gt;/Unit Delay</i></font></a>'</span>
+</span><span><a class="LN" name="228">  228   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="229">  229   </a>  real_T ActiveOutputRange_Start;      <span class="CT">/* Expression: -1</span>
+</span><span><a class="LN" name="230">  230   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:465')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/Active Output Range</i></font></a>'</span>
+</span><span><a class="LN" name="231">  231   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="232">  232   </a>  real_T ActiveOutputRange_End;        <span class="CT">/* Expression: 1</span>
+</span><span><a class="LN" name="233">  233   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:465')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/Active Output Range</i></font></a>'</span>
+</span><span><a class="LN" name="234">  234   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="235">  235   </a>  real_T AntiWindup_Gain;              <span class="CT">/* Expression: 10000</span>
+</span><span><a class="LN" name="236">  236   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:466')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/Anti Windup</i></font></a>'</span>
+</span><span><a class="LN" name="237">  237   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="238">  238   </a>  real_T ManualPWM_Value;              <span class="CT">/* Expression: -0.01</span>
+</span><span><a class="LN" name="239">  239   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:426')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/Manual PWM</i></font></a>'</span>
+</span><span><a class="LN" name="240">  240   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="241">  241   </a>  uint8_T Position_CurrentSetting;     <span class="CT">/* Computed Parameter: Position_CurrentSetting</span>
+</span><span><a class="LN" name="242">  242   </a><span class="CT">                                        * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:467')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/Position</i></font></a>'</span>
+</span><span><a class="LN" name="243">  243   </a><span class="CT">                                        */</span>
+</span><span><a class="LN" name="244">  244   </a>  uint8_T ManualPWMControl_CurrentSetting;<span class="CT">/* Computed Parameter: ManualPWMControl_CurrentSetting</span>
+</span><span><a class="LN" name="245">  245   </a><span class="CT">                                           * Referenced by: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:427')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/Manual PWM Control</i></font></a>'</span>
+</span><span><a class="LN" name="246">  246   </a><span class="CT">                                           */</span>
+</span><span><a class="LN" name="247">  247   </a><b>}</b>;
+</span><span><a class="LN" name="248">  248   </a>
+</span><span><a class="LN" name="249">  249   </a><span class="CT">/* Real-time Model Data Structure */</span>
+</span><span><a class="LN" name="250">  250   </a><span class="KW">struct</span> tag_RTM_rpi_dc_motor_control <b>{</b>
+</span><span><a class="LN" name="251">  251   </a>  <span class="KW">struct</span> SimStruct_tag * *childSfunctions;
+</span><span><a class="LN" name="252">  252   </a>  <span class="DT">const</span> char_T *errorStatus;
+</span><span><a class="LN" name="253">  253   </a>  SS_SimMode simMode;
+</span><span><a class="LN" name="254">  254   </a>  RTWSolverInfo solverInfo;
+</span><span><a class="LN" name="255">  255   </a>  RTWSolverInfo *solverInfoPtr;
+</span><span><a class="LN" name="256">  256   </a>  <span class="DT">void</span> *sfcnInfo;
+</span><span><a class="LN" name="257">  257   </a>
+</span><span><a class="LN" name="258">  258   </a>  <span class="CT">/*</span>
+</span><span><a class="LN" name="259">  259   </a><span class="CT">   * NonInlinedSFcns:</span>
+</span><span><a class="LN" name="260">  260   </a><span class="CT">   * The following substructure contains information regarding</span>
+</span><span><a class="LN" name="261">  261   </a><span class="CT">   * non-inlined s-functions used in the model.</span>
+</span><span><a class="LN" name="262">  262   </a><span class="CT">   */</span>
+</span><span><a class="LN" name="263">  263   </a>  <span class="KW">struct</span> <b>{</b>
+</span><span><a class="LN" name="264">  264   </a>    RTWSfcnInfo sfcnInfo;
+</span><span><a class="LN" name="265">  265   </a>    time_T *taskTimePtrs[1];
+</span><span><a class="LN" name="266">  266   </a>    SimStruct childSFunctions[2];
+</span><span><a class="LN" name="267">  267   </a>    SimStruct *childSFunctionPtrs[2];
+</span><span><a class="LN" name="268">  268   </a>    <span class="KW">struct</span> _ssBlkInfo2 blkInfo2[2];
+</span><span><a class="LN" name="269">  269   </a>    <span class="KW">struct</span> _ssSFcnModelMethods2 methods2[2];
+</span><span><a class="LN" name="270">  270   </a>    <span class="KW">struct</span> _ssSFcnModelMethods3 methods3[2];
+</span><span><a class="LN" name="271">  271   </a>    <span class="KW">struct</span> _ssStatesInfo2 statesInfo2[2];
+</span><span><a class="LN" name="272">  272   </a>    <span class="KW">struct</span> <b>{</b>
+</span><span><a class="LN" name="273">  273   </a>      time_T sfcnPeriod[1];
+</span><span><a class="LN" name="274">  274   </a>      time_T sfcnOffset[1];
+</span><span><a class="LN" name="275">  275   </a>      int_T sfcnTsMap[1];
+</span><span><a class="LN" name="276">  276   </a>      <span class="KW">struct</span> _ssPortInputs inputPortInfo[1];
+</span><span><a class="LN" name="277">  277   </a>      uint_T attribs[3];
+</span><span><a class="LN" name="278">  278   </a>      <a href="rt_matrx_c.html#type_mxArray" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_mxArray');" target="_self"><font color="#1122aa">mxArray</font></a> *params[3];
+</span><span><a class="LN" name="279">  279   </a>      <span class="KW">struct</span> _ssDWorkRecord dWork[2];
+</span><span><a class="LN" name="280">  280   </a>      <span class="KW">struct</span> _ssDWorkAuxRecord dWorkAux[2];
+</span><span><a class="LN" name="281">  281   </a>    <b>}</b> Sfcn0;
+</span><span><a class="LN" name="282">  282   </a>
+</span><span><a class="LN" name="283">  283   </a>    <span class="KW">struct</span> <b>{</b>
+</span><span><a class="LN" name="284">  284   </a>      time_T sfcnPeriod[1];
+</span><span><a class="LN" name="285">  285   </a>      time_T sfcnOffset[1];
+</span><span><a class="LN" name="286">  286   </a>      int_T sfcnTsMap[1];
+</span><span><a class="LN" name="287">  287   </a>      <span class="KW">struct</span> _ssPortInputs inputPortInfo[1];
+</span><span><a class="LN" name="288">  288   </a>      <span class="KW">struct</span> _ssPortOutputs outputPortInfo[1];
+</span><span><a class="LN" name="289">  289   </a>      uint_T attribs[7];
+</span><span><a class="LN" name="290">  290   </a>      <a href="rt_matrx_c.html#type_mxArray" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_mxArray');" target="_self"><font color="#1122aa">mxArray</font></a> *params[7];
+</span><span><a class="LN" name="291">  291   </a>      <span class="KW">struct</span> _ssDWorkRecord dWork[1];
+</span><span><a class="LN" name="292">  292   </a>      <span class="KW">struct</span> _ssDWorkAuxRecord dWorkAux[1];
+</span><span><a class="LN" name="293">  293   </a>    <b>}</b> Sfcn1;
+</span><span><a class="LN" name="294">  294   </a>  <b>}</b> NonInlinedSFcns;
+</span><span><a class="LN" name="295">  295   </a>
+</span><span><a class="LN" name="296">  296   </a>  <span class="CT">/*</span>
+</span><span><a class="LN" name="297">  297   </a><span class="CT">   * ModelData:</span>
+</span><span><a class="LN" name="298">  298   </a><span class="CT">   * The following substructure contains information regarding</span>
+</span><span><a class="LN" name="299">  299   </a><span class="CT">   * the data used in the model.</span>
+</span><span><a class="LN" name="300">  300   </a><span class="CT">   */</span>
+</span><span><a class="LN" name="301">  301   </a>  <span class="KW">struct</span> <b>{</b>
+</span><span><a class="LN" name="302">  302   </a>    boolean_T zCCacheNeedsReset;
+</span><span><a class="LN" name="303">  303   </a>    boolean_T derivCacheNeedsReset;
+</span><span><a class="LN" name="304">  304   </a>    boolean_T blkStateChange;
+</span><span><a class="LN" name="305">  305   </a>  <b>}</b> ModelData;
+</span><span><a class="LN" name="306">  306   </a>
+</span><span><a class="LN" name="307">  307   </a>  <span class="CT">/*</span>
+</span><span><a class="LN" name="308">  308   </a><span class="CT">   * Sizes:</span>
+</span><span><a class="LN" name="309">  309   </a><span class="CT">   * The following substructure contains sizes information</span>
+</span><span><a class="LN" name="310">  310   </a><span class="CT">   * for many of the model attributes such as inputs, outputs,</span>
+</span><span><a class="LN" name="311">  311   </a><span class="CT">   * dwork, sample times, etc.</span>
+</span><span><a class="LN" name="312">  312   </a><span class="CT">   */</span>
+</span><span><a class="LN" name="313">  313   </a>  <span class="KW">struct</span> <b>{</b>
+</span><span><a class="LN" name="314">  314   </a>    uint32_T options;
+</span><span><a class="LN" name="315">  315   </a>    int_T numContStates;
+</span><span><a class="LN" name="316">  316   </a>    int_T numU;
+</span><span><a class="LN" name="317">  317   </a>    int_T numY;
+</span><span><a class="LN" name="318">  318   </a>    int_T numSampTimes;
+</span><span><a class="LN" name="319">  319   </a>    int_T numBlocks;
+</span><span><a class="LN" name="320">  320   </a>    int_T numBlockIO;
+</span><span><a class="LN" name="321">  321   </a>    int_T numBlockPrms;
+</span><span><a class="LN" name="322">  322   </a>    int_T numDwork;
+</span><span><a class="LN" name="323">  323   </a>    int_T numSFcnPrms;
+</span><span><a class="LN" name="324">  324   </a>    int_T numSFcns;
+</span><span><a class="LN" name="325">  325   </a>    int_T numIports;
+</span><span><a class="LN" name="326">  326   </a>    int_T numOports;
+</span><span><a class="LN" name="327">  327   </a>    int_T numNonSampZCs;
+</span><span><a class="LN" name="328">  328   </a>    int_T sysDirFeedThru;
+</span><span><a class="LN" name="329">  329   </a>    int_T rtwGenSfcn;
+</span><span><a class="LN" name="330">  330   </a>  <b>}</b> Sizes;
+</span><span><a class="LN" name="331">  331   </a>
+</span><span><a class="LN" name="332">  332   </a>  <span class="CT">/*</span>
+</span><span><a class="LN" name="333">  333   </a><span class="CT">   * Timing:</span>
+</span><span><a class="LN" name="334">  334   </a><span class="CT">   * The following substructure contains information regarding</span>
+</span><span><a class="LN" name="335">  335   </a><span class="CT">   * the timing information for the model.</span>
+</span><span><a class="LN" name="336">  336   </a><span class="CT">   */</span>
+</span><span><a class="LN" name="337">  337   </a>  <span class="KW">struct</span> <b>{</b>
+</span><span><a class="LN" name="338">  338   </a>    time_T stepSize;
+</span><span><a class="LN" name="339">  339   </a>    uint32_T clockTick0;
+</span><span><a class="LN" name="340">  340   </a>    time_T stepSize0;
+</span><span><a class="LN" name="341">  341   </a>    time_T tStart;
+</span><span><a class="LN" name="342">  342   </a>    time_T tFinal;
+</span><span><a class="LN" name="343">  343   </a>    time_T timeOfLastOutput;
+</span><span><a class="LN" name="344">  344   </a>    boolean_T stopRequestedFlag;
+</span><span><a class="LN" name="345">  345   </a>    time_T *sampleTimes;
+</span><span><a class="LN" name="346">  346   </a>    time_T *offsetTimes;
+</span><span><a class="LN" name="347">  347   </a>    int_T *sampleTimeTaskIDPtr;
+</span><span><a class="LN" name="348">  348   </a>    int_T *sampleHits;
+</span><span><a class="LN" name="349">  349   </a>    int_T *perTaskSampleHits;
+</span><span><a class="LN" name="350">  350   </a>    time_T *t;
+</span><span><a class="LN" name="351">  351   </a>    time_T sampleTimesArray[1];
+</span><span><a class="LN" name="352">  352   </a>    time_T offsetTimesArray[1];
+</span><span><a class="LN" name="353">  353   </a>    int_T sampleTimeTaskIDArray[1];
+</span><span><a class="LN" name="354">  354   </a>    int_T sampleHitArray[1];
+</span><span><a class="LN" name="355">  355   </a>    int_T perTaskSampleHitsArray[1];
+</span><span><a class="LN" name="356">  356   </a>    time_T tArray[1];
+</span><span><a class="LN" name="357">  357   </a>  <b>}</b> Timing;
+</span><span><a class="LN" name="358">  358   </a><b>}</b>;
+</span><span><a class="LN" name="359">  359   </a>
+</span><span><a class="LN" name="360">  360   </a><span class="CT">/* Block parameters (auto storage) */</span>
+</span><span><a class="LN" name="361">  361   </a><span class="DT">extern</span> <a href="rpi_dc_motor_control_types_h.html#type_Parameters_rpi_dc_motor_control" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_Parameters_rpi_dc_motor_control');" target="_self"><font color="#1122aa">Parameters_rpi_dc_motor_control</font></a> <a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>;
+</span><span><a class="LN" name="362">  362   </a>
+</span><span><a class="LN" name="363">  363   </a><span class="CT">/* Block signals (auto storage) */</span>
+</span><span><a class="LN" name="364">  364   </a><span class="DT">extern</span> <a href="#type_BlockIO_rpi_dc_motor_control" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_BlockIO_rpi_dc_motor_control');" target="_self"><font color="#1122aa">BlockIO_rpi_dc_motor_control</font></a> <a href="rpi_dc_motor_control_c.html#var_rpi_dc_motor_control_B" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_B');" target="_self"><font color="#1122aa">rpi_dc_motor_control_B</font></a>;
+</span><span><a class="LN" name="365">  365   </a>
+</span><span><a class="LN" name="366">  366   </a><span class="CT">/* Block states (auto storage) */</span>
+</span><span><a class="LN" name="367">  367   </a><span class="DT">extern</span> <a href="#type_D_Work_rpi_dc_motor_control" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_D_Work_rpi_dc_motor_control');" target="_self"><font color="#1122aa">D_Work_rpi_dc_motor_control</font></a> <a href="rpi_dc_motor_control_c.html#var_rpi_dc_motor_control_DWork" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_DWork');" target="_self"><font color="#1122aa">rpi_dc_motor_control_DWork</font></a>;
+</span><span><a class="LN" name="368">  368   </a>
+</span><span><a class="LN" name="369">  369   </a><span class="CT">/* Model entry point functions */</span>
+</span><span><a class="LN" name="370">  370   </a><span class="DT">extern</span> <span class="DT">void</span> <a href="rpi_dc_motor_control_c.html#fcn_rpi_dc_motor_control_initialize" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_rpi_dc_motor_control_initialize');" target="_self"><font color="#1122aa">rpi_dc_motor_control_initialize</font></a>(<span class="DT">void</span>);
+</span><span><a class="LN" name="371">  371   </a><span class="DT">extern</span> <span class="DT">void</span> <a href="rpi_dc_motor_control_c.html#fcn_rpi_dc_motor_control_step" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_rpi_dc_motor_control_step');" target="_self"><font color="#1122aa">rpi_dc_motor_control_step</font></a>(<span class="DT">void</span>);
+</span><span><a class="LN" name="372">  372   </a><span class="DT">extern</span> <span class="DT">void</span> <a href="rpi_dc_motor_control_c.html#fcn_rpi_dc_motor_control_terminate" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_rpi_dc_motor_control_terminate');" target="_self"><font color="#1122aa">rpi_dc_motor_control_terminate</font></a>(<span class="DT">void</span>);
+</span><span><a class="LN" name="373">  373   </a>
+</span><span><a class="LN" name="374">  374   </a><span class="CT">/* Real-time Model object */</span>
+</span><span><a class="LN" name="375">  375   </a><span class="DT">extern</span> <a href="rpi_dc_motor_control_types_h.html#type_RT_MODEL_rpi_dc_motor_control" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_RT_MODEL_rpi_dc_motor_control');" target="_self"><font color="#1122aa">RT_MODEL_rpi_dc_motor_control</font></a> *<span class="DT">const</span> <a href="rpi_dc_motor_control_c.html#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>;
+</span><span><a class="LN" name="376">  376   </a>
+</span><span><a class="LN" name="377">  377   </a><span class="CT">/*-</span>
+</span><span><a class="LN" name="378">  378   </a><span class="CT"> * The generated code includes comments that allow you to trace directly</span>
+</span><span><a class="LN" name="379">  379   </a><span class="CT"> * back to the appropriate location in the model.  The basic format</span>
+</span><span><a class="LN" name="380">  380   </a><span class="CT"> * is &lt;system&gt;/block_name, where system is the system number (uniquely</span>
+</span><span><a class="LN" name="381">  381   </a><span class="CT"> * assigned by Simulink) and block_name is the name of the block.</span>
+</span><span><a class="LN" name="382">  382   </a><span class="CT"> *</span>
+</span><span><a class="LN" name="383">  383   </a><span class="CT"> * Use the MATLAB hilite_system command to trace the generated code back</span>
+</span><span><a class="LN" name="384">  384   </a><span class="CT"> * to the model.  For example,</span>
+</span><span><a class="LN" name="385">  385   </a><span class="CT"> *</span>
+</span><span><a class="LN" name="386">  386   </a><span class="CT"> * hilite_system('&lt;S3&gt;')    - opens system 3</span>
+</span><span><a class="LN" name="387">  387   </a><span class="CT"> * hilite_system('&lt;S3&gt;/Kp') - opens and selects block Kp which resides in S3</span>
+</span><span><a class="LN" name="388">  388   </a><span class="CT"> *</span>
+</span><span><a class="LN" name="389">  389   </a><span class="CT"> * Here is the system hierarchy for this model</span>
+</span><span><a class="LN" name="390">  390   </a><span class="CT"> *</span>
+</span><span><a class="LN" name="391">  391   </a><span class="CT"> * '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control')" name="code2model"><font color="#117755"><i>&lt;Root&gt;</i></font></a>' : 'rpi_dc_motor_control'</span>
+</span><span><a class="LN" name="392">  392   </a><span class="CT"> * '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:445')" name="code2model"><font color="#117755"><i>&lt;S1&gt;</i></font></a>'   : 'rpi_dc_motor_control/Subsys PSD'</span>
+</span><span><a class="LN" name="393">  393   </a><span class="CT"> * '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:478')" name="code2model"><font color="#117755"><i>&lt;S2&gt;</i></font></a>'   : 'rpi_dc_motor_control/Trajectory'</span>
+</span><span><a class="LN" name="394">  394   </a><span class="CT"> * '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:486')" name="code2model"><font color="#117755"><i>&lt;S3&gt;</i></font></a>'   : 'rpi_dc_motor_control/Trajectory/Latch'</span>
+</span><span><a class="LN" name="395">  395   </a><span class="CT"> */</span>
+</span><span><a class="LN" name="396">  396   </a><font color="#992211">#</font><span class="PP">endif</span>                                 <span class="CT">/* RTW_HEADER_rpi_dc_motor_control_h_ */</span>
+</span><span><a class="LN" name="397">  397   </a>
+</span><span><a class="LN" name="398">  398   </a><span class="CT">/*</span>
+</span><span><a class="LN" name="399">  399   </a><span class="CT"> * File trailer for generated code.</span>
+</span><span><a class="LN" name="400">  400   </a><span class="CT"> *</span>
+</span><span><a class="LN" name="401">  401   </a><span class="CT"> * [EOF]</span>
+</span><span><a class="LN" name="402">  402   </a><span class="CT"> */</span>
+</span><span><a class="LN" name="403">  403   </a>
+</span></pre>
+</td></tr></table>
+</p>
+</body>
+</html>

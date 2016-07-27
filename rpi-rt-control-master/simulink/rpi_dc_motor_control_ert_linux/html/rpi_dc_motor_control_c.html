@@ -1,0 +1,709 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>RTW Report - rpi_dc_motor_control.c</title>
+<style> .LN { font-style: italic; color: #888888 } </style>
+<style> .CT { font-style: italic; color: #117755 } </style>
+<style> .PP { font-style: bold;   color: #992211 } </style>
+<style> .KW { font-style: bold;   color: #112266 } </style>
+<style> .DT { font-style: bold;   color: #112266 } </style>
+<link rel="stylesheet" type="text/css" href="rtwreport.css"></link><script language="JavaScript" type="text/javascript" src="rtwreport_utils.js"></script>
+<SCRIPT type="text/javascript" src="rtwannotate.js"></SCRIPT>
+</head>
+<body bgcolor="#eeeeee" text="#1122aa" onload="try {if (top) { if (top.rtwFileOnLoad) top.rtwFileOnLoad(window.document); else local_onload();}} catch(err) {};if (typeof rtwannotate === 'function') {rtwannotate('rpi_dc_motor_control_c_cov.xml');}">
+<p>
+<table border="0" cellspacing="0" cellpadding="6" width="100%%" height="100%%"><tr><td width="100%%" valign="top" bgcolor="#ffffff">
+<h4>File: <a href="../rpi_dc_motor_control.c" target="rtwreport_document_frame" id="linkToText_plain">rpi_dc_motor_control.c</a></h4>
+<pre id="RTWcode">
+<span><a class="LN" name="1">    1   </a><span class="CT">/*</span>
+</span><span><a class="LN" name="2">    2   </a><span class="CT"> * File: rpi_dc_motor_control.c</span>
+</span><span><a class="LN" name="3">    3   </a><span class="CT"> *</span>
+</span><span><a class="LN" name="4">    4   </a><span class="CT"> * Code generated for Simulink model 'rpi_dc_motor_control'.</span>
+</span><span><a class="LN" name="5">    5   </a><span class="CT"> *</span>
+</span><span><a class="LN" name="6">    6   </a><span class="CT"> * Model version                  : 1.160</span>
+</span><span><a class="LN" name="7">    7   </a><span class="CT"> * Simulink Coder version         : 8.6 (R2014a) 27-Dec-2013</span>
+</span><span><a class="LN" name="8">    8   </a><span class="CT"> * C/C++ source code generated on : Wed Apr 27 14:15:09 2016</span>
+</span><span><a class="LN" name="9">    9   </a><span class="CT"> *</span>
+</span><span><a class="LN" name="10">   10   </a><span class="CT"> * Target selection: ert_linux.tlc</span>
+</span><span><a class="LN" name="11">   11   </a><span class="CT"> * Embedded hardware selection: Intel-&gt;x86-64</span>
+</span><span><a class="LN" name="12">   12   </a><span class="CT"> * Code generation objectives: Unspecified</span>
+</span><span><a class="LN" name="13">   13   </a><span class="CT"> * Validation result: Not run</span>
+</span><span><a class="LN" name="14">   14   </a><span class="CT"> */</span>
+</span><span><a class="LN" name="15">   15   </a>
+</span><span><a class="LN" name="16">   16   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&quot;rpi_dc_motor_control.h&quot;</font>
+</span><span><a class="LN" name="17">   17   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&quot;rpi_dc_motor_control_private.h&quot;</font>
+</span><span><a class="LN" name="18">   18   </a>
+</span><span><a class="LN" name="19">   19   </a><span class="CT">/* Block signals (auto storage) */</span>
+</span><span><a class="LN" name="20">   20   </a><a href="rpi_dc_motor_control_h.html#type_BlockIO_rpi_dc_motor_control" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_BlockIO_rpi_dc_motor_control');" target="_self"><font color="#1122aa">BlockIO_rpi_dc_motor_control</font></a> <a name="var_rpi_dc_motor_control_B">rpi_dc_motor_control_B</a>;
+</span><span><a class="LN" name="21">   21   </a>
+</span><span><a class="LN" name="22">   22   </a><span class="CT">/* Block states (auto storage) */</span>
+</span><span><a class="LN" name="23">   23   </a><a href="rpi_dc_motor_control_h.html#type_D_Work_rpi_dc_motor_control" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_D_Work_rpi_dc_motor_control');" target="_self"><font color="#1122aa">D_Work_rpi_dc_motor_control</font></a> <a name="var_rpi_dc_motor_control_DWork">rpi_dc_motor_control_DWork</a>;
+</span><span><a class="LN" name="24">   24   </a>
+</span><span><a class="LN" name="25">   25   </a><span class="CT">/* Real-time model */</span>
+</span><span><a class="LN" name="26">   26   </a><a href="rpi_dc_motor_control_types_h.html#type_RT_MODEL_rpi_dc_motor_control" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_RT_MODEL_rpi_dc_motor_control');" target="_self"><font color="#1122aa">RT_MODEL_rpi_dc_motor_control</font></a> <a name="var_rpi_dc_motor_control_M_">rpi_dc_motor_control_M_</a>;
+</span><span><a class="LN" name="27">   27   </a><a href="rpi_dc_motor_control_types_h.html#type_RT_MODEL_rpi_dc_motor_control" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_RT_MODEL_rpi_dc_motor_control');" target="_self"><font color="#1122aa">RT_MODEL_rpi_dc_motor_control</font></a> *<span class="DT">const</span> <a name="var_rpi_dc_motor_control_M">rpi_dc_motor_control_M</a> =
+</span><span><a class="LN" name="28">   28   </a>  &amp;<a href="#var_rpi_dc_motor_control_M_" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M_');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M_</font></a>;
+</span><span><a class="LN" name="29">   29   </a>real_T <a name="fcn_look1_binlxpw">look1_binlxpw</a>(real_T u0, <span class="DT">const</span> real_T bp0[], <span class="DT">const</span> real_T table[],
+</span><span><a class="LN" name="30">   30   </a>                     uint32_T maxIndex)
+</span><span><a class="LN" name="31">   31   </a><b>{</b>
+</span><span><a class="LN" name="32">   32   </a>  real_T frac;
+</span><span><a class="LN" name="33">   33   </a>  uint32_T iRght;
+</span><span><a class="LN" name="34">   34   </a>  uint32_T iLeft;
+</span><span><a class="LN" name="35">   35   </a>  uint32_T bpIdx;
+</span><span><a class="LN" name="36">   36   </a>
+</span><span><a class="LN" name="37">   37   </a>  <span class="CT">/* Lookup 1-D</span>
+</span><span><a class="LN" name="38">   38   </a><span class="CT">     Search method: 'binary'</span>
+</span><span><a class="LN" name="39">   39   </a><span class="CT">     Use previous index: 'off'</span>
+</span><span><a class="LN" name="40">   40   </a><span class="CT">     Interpolation method: 'Linear'</span>
+</span><span><a class="LN" name="41">   41   </a><span class="CT">     Extrapolation method: 'Linear'</span>
+</span><span><a class="LN" name="42">   42   </a><span class="CT">     Use last breakpoint for index at or above upper limit: 'off'</span>
+</span><span><a class="LN" name="43">   43   </a><span class="CT">     Remove protection against out-of-range input in generated code: 'off'</span>
+</span><span><a class="LN" name="44">   44   </a><span class="CT">   */</span>
+</span><span><a class="LN" name="45">   45   </a>  <span class="CT">/* Prelookup - Index and Fraction</span>
+</span><span><a class="LN" name="46">   46   </a><span class="CT">     Index Search method: 'binary'</span>
+</span><span><a class="LN" name="47">   47   </a><span class="CT">     Extrapolation method: 'Linear'</span>
+</span><span><a class="LN" name="48">   48   </a><span class="CT">     Use previous index: 'off'</span>
+</span><span><a class="LN" name="49">   49   </a><span class="CT">     Use last breakpoint for index at or above upper limit: 'off'</span>
+</span><span><a class="LN" name="50">   50   </a><span class="CT">     Remove protection against out-of-range input in generated code: 'off'</span>
+</span><span><a class="LN" name="51">   51   </a><span class="CT">   */</span>
+</span><span><a class="LN" name="52">   52   </a>  <span class="KW">if</span> (u0 &lt;= bp0[0U]) <b>{</b>
+</span><span><a class="LN" name="53">   53   </a>    iLeft = 0U;
+</span><span><a class="LN" name="54">   54   </a>    frac = (u0 - bp0[0U]) / (bp0[1U] - bp0[0U]);
+</span><span><a class="LN" name="55">   55   </a>  <b>}</b> <span class="KW">else</span> <span class="KW">if</span> (u0 &lt; bp0[maxIndex]) <b>{</b>
+</span><span><a class="LN" name="56">   56   </a>    <span class="CT">/* Binary Search */</span>
+</span><span><a class="LN" name="57">   57   </a>    bpIdx = maxIndex &gt;&gt; 1U;
+</span><span><a class="LN" name="58">   58   </a>    iLeft = 0U;
+</span><span><a class="LN" name="59">   59   </a>    iRght = maxIndex;
+</span><span><a class="LN" name="60">   60   </a>    <span class="KW">while</span> (iRght - iLeft &gt; 1U) <b>{</b>
+</span><span><a class="LN" name="61">   61   </a>      <span class="KW">if</span> (u0 &lt; bp0[bpIdx]) <b>{</b>
+</span><span><a class="LN" name="62">   62   </a>        iRght = bpIdx;
+</span><span><a class="LN" name="63">   63   </a>      <b>}</b> <span class="KW">else</span> <b>{</b>
+</span><span><a class="LN" name="64">   64   </a>        iLeft = bpIdx;
+</span><span><a class="LN" name="65">   65   </a>      <b>}</b>
+</span><span><a class="LN" name="66">   66   </a>
+</span><span><a class="LN" name="67">   67   </a>      bpIdx = (iRght + iLeft) &gt;&gt; 1U;
+</span><span><a class="LN" name="68">   68   </a>    <b>}</b>
+</span><span><a class="LN" name="69">   69   </a>
+</span><span><a class="LN" name="70">   70   </a>    frac = (u0 - bp0[iLeft]) / (bp0[iLeft + 1U] - bp0[iLeft]);
+</span><span><a class="LN" name="71">   71   </a>  <b>}</b> <span class="KW">else</span> <b>{</b>
+</span><span><a class="LN" name="72">   72   </a>    iLeft = maxIndex - 1U;
+</span><span><a class="LN" name="73">   73   </a>    frac = (u0 - bp0[maxIndex - 1U]) / (bp0[maxIndex] - bp0[maxIndex - 1U]);
+</span><span><a class="LN" name="74">   74   </a>  <b>}</b>
+</span><span><a class="LN" name="75">   75   </a>
+</span><span><a class="LN" name="76">   76   </a>  <span class="CT">/* Interpolation 1-D</span>
+</span><span><a class="LN" name="77">   77   </a><span class="CT">     Interpolation method: 'Linear'</span>
+</span><span><a class="LN" name="78">   78   </a><span class="CT">     Use last breakpoint for index at or above upper limit: 'off'</span>
+</span><span><a class="LN" name="79">   79   </a><span class="CT">     Overflow mode: 'portable wrapping'</span>
+</span><span><a class="LN" name="80">   80   </a><span class="CT">   */</span>
+</span><span><a class="LN" name="81">   81   </a>  <span class="KW">return</span> (table[iLeft + 1U] - table[iLeft]) * frac + table[iLeft];
+</span><span><a class="LN" name="82">   82   </a><b>}</b>
+</span><span><a class="LN" name="83">   83   </a>
+</span><span><a class="LN" name="84">   84   </a><span class="CT">/* Model step function */</span>
+</span><span><a class="LN" name="85">   85   </a><span class="DT">void</span> <a name="fcn_rpi_dc_motor_control_step">rpi_dc_motor_control_step</a>(<span class="DT">void</span>)
+</span><span><a class="LN" name="86">   86   </a><b>{</b>
+</span><span><a class="LN" name="87">   87   </a>  <span class="CT">/* local block i/o variables */</span>
+</span><span><a class="LN" name="88">   88   </a>  real_T rtb_DigitalClock;
+</span><span><a class="LN" name="89">   89   </a>  real_T rtb_ActiveOutputRange;
+</span><span><a class="LN" name="90">   90   </a>  real_T rtb_Sum1;
+</span><span><a class="LN" name="91">   91   </a>  real_T rtb_Sum3;
+</span><span><a class="LN" name="92">   92   </a>  real_T tmp;
+</span><span><a class="LN" name="93">   93   </a>
+</span><span><a class="LN" name="94">   94   </a>  <span class="CT">/* Level2 S-Function Block: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:425')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/PWMwDir</i></font></a>' (sfPWMwDirOutput) */</span>
+</span><span><a class="LN" name="95">   95   </a>  <b>{</b>
+</span><span><a class="LN" name="96">   96   </a>    SimStruct *rts = <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;childSfunctions[0];
+</span><span><a class="LN" name="97">   97   </a>    sfcnOutputs(rts, 0);
+</span><span><a class="LN" name="98">   98   </a>  <b>}</b>
+</span><span><a class="LN" name="99">   99   </a>
+</span><span><a class="LN" name="100">  100   </a>  <span class="CT">/* DigitalClock: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:477')" name="code2model"><font color="#117755"><i>&lt;S2&gt;/Digital Clock</i></font></a>' */</span>
+</span><span><a class="LN" name="101">  101   </a>  rtb_DigitalClock = <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;Timing.t[0];
+</span><span><a class="LN" name="102">  102   </a>
+</span><span><a class="LN" name="103">  103   </a>  <span class="CT">/* Outputs for Enabled SubSystem: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:486')" name="code2model"><font color="#117755"><i>&lt;S2&gt;/Latch</i></font></a>' incorporates:</span>
+</span><span><a class="LN" name="104">  104   </a><span class="CT">   *  EnablePort: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:486:2')" name="code2model"><font color="#117755"><i>&lt;S3&gt;/Enable</i></font></a>'</span>
+</span><span><a class="LN" name="105">  105   </a><span class="CT">   */</span>
+</span><span><a class="LN" name="106">  106   </a>  <span class="CT">/* RelationalOperator: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:488')" name="code2model"><font color="#117755"><i>&lt;S2&gt;/ToBolean</i></font></a>' incorporates:</span>
+</span><span><a class="LN" name="107">  107   </a><span class="CT">   *  Constant: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:482')" name="code2model"><font color="#117755"><i>&lt;S2&gt;/Period time</i></font></a>'</span>
+</span><span><a class="LN" name="108">  108   </a><span class="CT">   *  Inport: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:486:1')" name="code2model"><font color="#117755"><i>&lt;S3&gt;/In</i></font></a>'</span>
+</span><span><a class="LN" name="109">  109   </a><span class="CT">   *  Memory: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:489')" name="code2model"><font color="#117755"><i>&lt;S2&gt;/Memory</i></font></a>'</span>
+</span><span><a class="LN" name="110">  110   </a><span class="CT">   */</span>
+</span><span><a class="LN" name="111">  111   </a>  <span class="KW">if</span> (<a href="#var_rpi_dc_motor_control_DWork" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_DWork');" target="_self"><font color="#1122aa">rpi_dc_motor_control_DWork</font></a>.Memory_PreviousInput &gt;
+</span><span><a class="LN" name="112">  112   </a>      <a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.Periodtime_Value) <b>{</b>
+</span><span><a class="LN" name="113">  113   </a>    <a href="#var_rpi_dc_motor_control_B" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_B');" target="_self"><font color="#1122aa">rpi_dc_motor_control_B</font></a>.In = rtb_DigitalClock;
+</span><span><a class="LN" name="114">  114   </a>  <b>}</b>
+</span><span><a class="LN" name="115">  115   </a>
+</span><span><a class="LN" name="116">  116   </a>  <span class="CT">/* End of RelationalOperator: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:488')" name="code2model"><font color="#117755"><i>&lt;S2&gt;/ToBolean</i></font></a>' */</span>
+</span><span><a class="LN" name="117">  117   </a>  <span class="CT">/* End of Outputs for SubSystem: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:486')" name="code2model"><font color="#117755"><i>&lt;S2&gt;/Latch</i></font></a>' */</span>
+</span><span><a class="LN" name="118">  118   </a>
+</span><span><a class="LN" name="119">  119   </a>  <span class="CT">/* Sum: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:487')" name="code2model"><font color="#117755"><i>&lt;S2&gt;/Sum3</i></font></a>' */</span>
+</span><span><a class="LN" name="120">  120   </a>  rtb_Sum3 = rtb_DigitalClock - <a href="#var_rpi_dc_motor_control_B" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_B');" target="_self"><font color="#1122aa">rpi_dc_motor_control_B</font></a>.In;
+</span><span><a class="LN" name="121">  121   </a>
+</span><span><a class="LN" name="122">  122   </a>  <span class="CT">/* Lookup_n-D: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:483')" name="code2model"><font color="#117755"><i>&lt;S2&gt;/1-D Lookup Table</i></font></a>' */</span>
+</span><span><a class="LN" name="123">  123   </a>  rtb_ActiveOutputRange = <a href="#fcn_look1_binlxpw" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_look1_binlxpw');" target="_self"><font color="#1122aa">look1_binlxpw</font></a>(rtb_Sum3,
+</span><span><a class="LN" name="124">  124   </a>    <a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.DLookupTable_bp01Data,
+</span><span><a class="LN" name="125">  125   </a>    <a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.DLookupTable_tableData, 5U);
+</span><span><a class="LN" name="126">  126   </a>
+</span><span><a class="LN" name="127">  127   </a>  <span class="CT">/* ManualSwitch: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:467')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/Position</i></font></a>' incorporates:</span>
+</span><span><a class="LN" name="128">  128   </a><span class="CT">   *  Constant: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:462')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/Position Request</i></font></a>'</span>
+</span><span><a class="LN" name="129">  129   </a><span class="CT">   */</span>
+</span><span><a class="LN" name="130">  130   </a>  <span class="KW">if</span> (<a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.Position_CurrentSetting == 1) <b>{</b>
+</span><span><a class="LN" name="131">  131   </a>    rtb_ActiveOutputRange = <a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.PositionRequest_Value;
+</span><span><a class="LN" name="132">  132   </a>  <b>}</b>
+</span><span><a class="LN" name="133">  133   </a>
+</span><span><a class="LN" name="134">  134   </a>  <span class="CT">/* End of ManualSwitch: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:467')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/Position</i></font></a>' */</span>
+</span><span><a class="LN" name="135">  135   </a>
+</span><span><a class="LN" name="136">  136   </a>  <span class="CT">/* Level2 S-Function Block: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:392')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/IRC0</i></font></a>' (sfIRCInput) */</span>
+</span><span><a class="LN" name="137">  137   </a>  <b>{</b>
+</span><span><a class="LN" name="138">  138   </a>    SimStruct *rts = <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;childSfunctions[1];
+</span><span><a class="LN" name="139">  139   </a>    sfcnOutputs(rts, 0);
+</span><span><a class="LN" name="140">  140   </a>  <b>}</b>
+</span><span><a class="LN" name="141">  141   </a>
+</span><span><a class="LN" name="142">  142   </a>  <span class="CT">/* Sum: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:451')" name="code2model"><font color="#117755"><i>&lt;S1&gt;/(eFi1-4)</i></font></a>' incorporates:</span>
+</span><span><a class="LN" name="143">  143   </a><span class="CT">   *  DataTypeConversion: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:408')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/IRC int32 to Real</i></font></a>'</span>
+</span><span><a class="LN" name="144">  144   </a><span class="CT">   */</span>
+</span><span><a class="LN" name="145">  145   </a>  rtb_ActiveOutputRange -= (real_T)<a href="#var_rpi_dc_motor_control_B" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_B');" target="_self"><font color="#1122aa">rpi_dc_motor_control_B</font></a>.IRC0;
+</span><span><a class="LN" name="146">  146   </a>
+</span><span><a class="LN" name="147">  147   </a>  <span class="CT">/* DiscreteIntegrator: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:453')" name="code2model"><font color="#117755"><i>&lt;S1&gt;/Int1</i></font></a>' incorporates:</span>
+</span><span><a class="LN" name="148">  148   </a><span class="CT">   *  Constant: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:464')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/  RESET</i></font></a>'</span>
+</span><span><a class="LN" name="149">  149   </a><span class="CT">   */</span>
+</span><span><a class="LN" name="150">  150   </a>  <span class="KW">if</span> ((<a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.RESET_Value != 0.0) ||
+</span><span><a class="LN" name="151">  151   </a>      (<a href="#var_rpi_dc_motor_control_DWork" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_DWork');" target="_self"><font color="#1122aa">rpi_dc_motor_control_DWork</font></a>.Int1_PrevResetState != 0)) <b>{</b>
+</span><span><a class="LN" name="152">  152   </a>    <a href="#var_rpi_dc_motor_control_DWork" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_DWork');" target="_self"><font color="#1122aa">rpi_dc_motor_control_DWork</font></a>.Int1_DSTATE = <a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.Int1_IC;
+</span><span><a class="LN" name="153">  153   </a>  <b>}</b>
+</span><span><a class="LN" name="154">  154   </a>
+</span><span><a class="LN" name="155">  155   </a>  <span class="CT">/* Sum: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:457')" name="code2model"><font color="#117755"><i>&lt;S1&gt;/Sum1</i></font></a>' incorporates:</span>
+</span><span><a class="LN" name="156">  156   </a><span class="CT">   *  DiscreteIntegrator: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:453')" name="code2model"><font color="#117755"><i>&lt;S1&gt;/Int1</i></font></a>'</span>
+</span><span><a class="LN" name="157">  157   </a><span class="CT">   *  Gain: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:450')" name="code2model"><font color="#117755"><i>&lt;S1&gt;/  Derivative</i></font></a>'</span>
+</span><span><a class="LN" name="158">  158   </a><span class="CT">   *  Gain: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:454')" name="code2model"><font color="#117755"><i>&lt;S1&gt;/Integrative</i></font></a>'</span>
+</span><span><a class="LN" name="159">  159   </a><span class="CT">   *  Gain: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:455')" name="code2model"><font color="#117755"><i>&lt;S1&gt;/Proportional</i></font></a>'</span>
+</span><span><a class="LN" name="160">  160   </a><span class="CT">   *  Sum: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:456')" name="code2model"><font color="#117755"><i>&lt;S1&gt;/Sum</i></font></a>'</span>
+</span><span><a class="LN" name="161">  161   </a><span class="CT">   *  UnitDelay: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:458')" name="code2model"><font color="#117755"><i>&lt;S1&gt;/Unit Delay</i></font></a>'</span>
+</span><span><a class="LN" name="162">  162   </a><span class="CT">   */</span>
+</span><span><a class="LN" name="163">  163   </a>  rtb_Sum1 = (<a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.SubsysPSD_P * rtb_ActiveOutputRange +
+</span><span><a class="LN" name="164">  164   </a>              <a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.SubsysPSD_I *
+</span><span><a class="LN" name="165">  165   </a>              <a href="#var_rpi_dc_motor_control_DWork" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_DWork');" target="_self"><font color="#1122aa">rpi_dc_motor_control_DWork</font></a>.Int1_DSTATE) + (rtb_ActiveOutputRange -
+</span><span><a class="LN" name="166">  166   </a>    <a href="#var_rpi_dc_motor_control_DWork" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_DWork');" target="_self"><font color="#1122aa">rpi_dc_motor_control_DWork</font></a>.UnitDelay_DSTATE) *
+</span><span><a class="LN" name="167">  167   </a>    <a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.SubsysPSD_D;
+</span><span><a class="LN" name="168">  168   </a>
+</span><span><a class="LN" name="169">  169   </a>  <span class="CT">/* ManualSwitch: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:427')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/Manual PWM Control</i></font></a>' incorporates:</span>
+</span><span><a class="LN" name="170">  170   </a><span class="CT">   *  Constant: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:426')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/Manual PWM</i></font></a>'</span>
+</span><span><a class="LN" name="171">  171   </a><span class="CT">   */</span>
+</span><span><a class="LN" name="172">  172   </a>  <span class="KW">if</span> (<a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.ManualPWMControl_CurrentSetting == 1) <b>{</b>
+</span><span><a class="LN" name="173">  173   </a>    <a href="#var_rpi_dc_motor_control_B" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_B');" target="_self"><font color="#1122aa">rpi_dc_motor_control_B</font></a>.ManualPWMControl = rtb_Sum1;
+</span><span><a class="LN" name="174">  174   </a>  <b>}</b> <span class="KW">else</span> <b>{</b>
+</span><span><a class="LN" name="175">  175   </a>    <a href="#var_rpi_dc_motor_control_B" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_B');" target="_self"><font color="#1122aa">rpi_dc_motor_control_B</font></a>.ManualPWMControl =
+</span><span><a class="LN" name="176">  176   </a>      <a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.ManualPWM_Value;
+</span><span><a class="LN" name="177">  177   </a>  <b>}</b>
+</span><span><a class="LN" name="178">  178   </a>
+</span><span><a class="LN" name="179">  179   </a>  <span class="CT">/* End of ManualSwitch: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:427')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/Manual PWM Control</i></font></a>' */</span>
+</span><span><a class="LN" name="180">  180   </a>
+</span><span><a class="LN" name="181">  181   </a>  <span class="CT">/* DataTypeConversion: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:469')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/To int</i></font></a>' incorporates:</span>
+</span><span><a class="LN" name="182">  182   </a><span class="CT">   *  Constant: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:464')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/  RESET</i></font></a>'</span>
+</span><span><a class="LN" name="183">  183   </a><span class="CT">   */</span>
+</span><span><a class="LN" name="184">  184   </a>  tmp = floor(<a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.RESET_Value);
+</span><span><a class="LN" name="185">  185   </a>  <span class="KW">if</span> (<a href="rt_nonfinite_c.html#fcn_rtIsNaN" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_rtIsNaN');" target="_self"><font color="#1122aa">rtIsNaN</font></a>(tmp) || <a href="rt_nonfinite_c.html#fcn_rtIsInf" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_rtIsInf');" target="_self"><font color="#1122aa">rtIsInf</font></a>(tmp)) <b>{</b>
+</span><span><a class="LN" name="186">  186   </a>    tmp = 0.0;
+</span><span><a class="LN" name="187">  187   </a>  <b>}</b> <span class="KW">else</span> <b>{</b>
+</span><span><a class="LN" name="188">  188   </a>    tmp = fmod(tmp, 256.0);
+</span><span><a class="LN" name="189">  189   </a>  <b>}</b>
+</span><span><a class="LN" name="190">  190   </a>
+</span><span><a class="LN" name="191">  191   </a>  <a href="#var_rpi_dc_motor_control_B" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_B');" target="_self"><font color="#1122aa">rpi_dc_motor_control_B</font></a>.Toint = (uint8_T)(tmp &lt; 0.0 ? (int32_T)(uint8_T)
+</span><span><a class="LN" name="192">  192   </a>    -(int8_T)(uint8_T)-tmp : (int32_T)(uint8_T)tmp);
+</span><span><a class="LN" name="193">  193   </a>
+</span><span><a class="LN" name="194">  194   </a>  <span class="CT">/* End of DataTypeConversion: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:469')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/To int</i></font></a>' */</span>
+</span><span><a class="LN" name="195">  195   </a>
+</span><span><a class="LN" name="196">  196   </a>  <span class="CT">/* Update for Memory: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:489')" name="code2model"><font color="#117755"><i>&lt;S2&gt;/Memory</i></font></a>' */</span>
+</span><span><a class="LN" name="197">  197   </a>  <a href="#var_rpi_dc_motor_control_DWork" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_DWork');" target="_self"><font color="#1122aa">rpi_dc_motor_control_DWork</font></a>.Memory_PreviousInput = rtb_Sum3;
+</span><span><a class="LN" name="198">  198   </a>
+</span><span><a class="LN" name="199">  199   </a>  <span class="CT">/* Level2 S-Function Block: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:392')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/IRC0</i></font></a>' (sfIRCInput) */</span>
+</span><span><a class="LN" name="200">  200   </a>  <b>{</b>
+</span><span><a class="LN" name="201">  201   </a>    SimStruct *rts = <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;childSfunctions[1];
+</span><span><a class="LN" name="202">  202   </a>    sfcnUpdate(rts, 0);
+</span><span><a class="LN" name="203">  203   </a>    <span class="KW">if</span> (ssGetErrorStatus(rts) != (NULL))
+</span><span><a class="LN" name="204">  204   </a>      <span class="KW">return</span>;
+</span><span><a class="LN" name="205">  205   </a>  <b>}</b>
+</span><span><a class="LN" name="206">  206   </a>
+</span><span><a class="LN" name="207">  207   </a>  <span class="CT">/* Update for DiscreteIntegrator: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:453')" name="code2model"><font color="#117755"><i>&lt;S1&gt;/Int1</i></font></a>' incorporates:</span>
+</span><span><a class="LN" name="208">  208   </a><span class="CT">   *  Constant: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:464')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/  RESET</i></font></a>'</span>
+</span><span><a class="LN" name="209">  209   </a><span class="CT">   *  Gain: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:466')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/Anti Windup</i></font></a>'</span>
+</span><span><a class="LN" name="210">  210   </a><span class="CT">   *  Sum: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:452')" name="code2model"><font color="#117755"><i>&lt;S1&gt;/AL sub</i></font></a>'</span>
+</span><span><a class="LN" name="211">  211   </a><span class="CT">   */</span>
+</span><span><a class="LN" name="212">  212   </a>  <span class="KW">if</span> (<a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.RESET_Value == 0.0) <b>{</b>
+</span><span><a class="LN" name="213">  213   </a>    <span class="CT">/* DeadZone: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:465')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/Active Output Range</i></font></a>' */</span>
+</span><span><a class="LN" name="214">  214   </a>    <span class="KW">if</span> (rtb_Sum1 &gt; <a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.ActiveOutputRange_End) <b>{</b>
+</span><span><a class="LN" name="215">  215   </a>      rtb_Sum1 -= <a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.ActiveOutputRange_End;
+</span><span><a class="LN" name="216">  216   </a>    <b>}</b> <span class="KW">else</span> <span class="KW">if</span> (rtb_Sum1 &gt;= <a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.ActiveOutputRange_Start) <b>{</b>
+</span><span><a class="LN" name="217">  217   </a>      rtb_Sum1 = 0.0;
+</span><span><a class="LN" name="218">  218   </a>    <b>}</b> <span class="KW">else</span> <b>{</b>
+</span><span><a class="LN" name="219">  219   </a>      rtb_Sum1 -= <a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.ActiveOutputRange_Start;
+</span><span><a class="LN" name="220">  220   </a>    <b>}</b>
+</span><span><a class="LN" name="221">  221   </a>
+</span><span><a class="LN" name="222">  222   </a>    <span class="CT">/* End of DeadZone: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:465')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/Active Output Range</i></font></a>' */</span>
+</span><span><a class="LN" name="223">  223   </a>    <a href="#var_rpi_dc_motor_control_DWork" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_DWork');" target="_self"><font color="#1122aa">rpi_dc_motor_control_DWork</font></a>.Int1_DSTATE += (rtb_ActiveOutputRange -
+</span><span><a class="LN" name="224">  224   </a>      <a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.AntiWindup_Gain * rtb_Sum1) *
+</span><span><a class="LN" name="225">  225   </a>      <a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.Int1_gainval;
+</span><span><a class="LN" name="226">  226   </a>  <b>}</b>
+</span><span><a class="LN" name="227">  227   </a>
+</span><span><a class="LN" name="228">  228   </a>  <span class="KW">if</span> (<a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.RESET_Value &gt; 0.0) <b>{</b>
+</span><span><a class="LN" name="229">  229   </a>    <a href="#var_rpi_dc_motor_control_DWork" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_DWork');" target="_self"><font color="#1122aa">rpi_dc_motor_control_DWork</font></a>.Int1_PrevResetState = 1;
+</span><span><a class="LN" name="230">  230   </a>  <b>}</b> <span class="KW">else</span> <span class="KW">if</span> (<a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.RESET_Value &lt; 0.0) <b>{</b>
+</span><span><a class="LN" name="231">  231   </a>    <a href="#var_rpi_dc_motor_control_DWork" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_DWork');" target="_self"><font color="#1122aa">rpi_dc_motor_control_DWork</font></a>.Int1_PrevResetState = -1;
+</span><span><a class="LN" name="232">  232   </a>  <b>}</b> <span class="KW">else</span> <span class="KW">if</span> (<a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.RESET_Value == 0.0) <b>{</b>
+</span><span><a class="LN" name="233">  233   </a>    <a href="#var_rpi_dc_motor_control_DWork" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_DWork');" target="_self"><font color="#1122aa">rpi_dc_motor_control_DWork</font></a>.Int1_PrevResetState = 0;
+</span><span><a class="LN" name="234">  234   </a>  <b>}</b> <span class="KW">else</span> <b>{</b>
+</span><span><a class="LN" name="235">  235   </a>    <a href="#var_rpi_dc_motor_control_DWork" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_DWork');" target="_self"><font color="#1122aa">rpi_dc_motor_control_DWork</font></a>.Int1_PrevResetState = 2;
+</span><span><a class="LN" name="236">  236   </a>  <b>}</b>
+</span><span><a class="LN" name="237">  237   </a>
+</span><span><a class="LN" name="238">  238   </a>  <span class="CT">/* End of Update for DiscreteIntegrator: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:453')" name="code2model"><font color="#117755"><i>&lt;S1&gt;/Int1</i></font></a>' */</span>
+</span><span><a class="LN" name="239">  239   </a>
+</span><span><a class="LN" name="240">  240   </a>  <span class="CT">/* Update for UnitDelay: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:458')" name="code2model"><font color="#117755"><i>&lt;S1&gt;/Unit Delay</i></font></a>' */</span>
+</span><span><a class="LN" name="241">  241   </a>  <a href="#var_rpi_dc_motor_control_DWork" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_DWork');" target="_self"><font color="#1122aa">rpi_dc_motor_control_DWork</font></a>.UnitDelay_DSTATE = rtb_ActiveOutputRange;
+</span><span><a class="LN" name="242">  242   </a>
+</span><span><a class="LN" name="243">  243   </a>  <span class="CT">/* Update absolute time for base rate */</span>
+</span><span><a class="LN" name="244">  244   </a>  <span class="CT">/* The "clockTick0" counts the number of times the code of this task has</span>
+</span><span><a class="LN" name="245">  245   </a><span class="CT">   * been executed. The absolute time is the multiplication of "clockTick0"</span>
+</span><span><a class="LN" name="246">  246   </a><span class="CT">   * and "Timing.stepSize0". Size of "clockTick0" ensures timer will not</span>
+</span><span><a class="LN" name="247">  247   </a><span class="CT">   * overflow during the application lifespan selected.</span>
+</span><span><a class="LN" name="248">  248   </a><span class="CT">   */</span>
+</span><span><a class="LN" name="249">  249   </a>  <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;Timing.t[0] =
+</span><span><a class="LN" name="250">  250   </a>    (++<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;Timing.clockTick0) *
+</span><span><a class="LN" name="251">  251   </a>    <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;Timing.stepSize0;
+</span><span><a class="LN" name="252">  252   </a><b>}</b>
+</span><span><a class="LN" name="253">  253   </a>
+</span><span><a class="LN" name="254">  254   </a><span class="CT">/* Model initialize function */</span>
+</span><span><a class="LN" name="255">  255   </a><span class="DT">void</span> <a name="fcn_rpi_dc_motor_control_initialize">rpi_dc_motor_control_initialize</a>(<span class="DT">void</span>)
+</span><span><a class="LN" name="256">  256   </a><b>{</b>
+</span><span><a class="LN" name="257">  257   </a>  <span class="CT">/* Registration code */</span>
+</span><span><a class="LN" name="258">  258   </a>
+</span><span><a class="LN" name="259">  259   </a>  <span class="CT">/* initialize non-finites */</span>
+</span><span><a class="LN" name="260">  260   </a>  <a href="rt_nonfinite_c.html#fcn_rt_InitInfAndNaN" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_rt_InitInfAndNaN');" target="_self"><font color="#1122aa">rt_InitInfAndNaN</font></a>(<span class="KW">sizeof</span>(real_T));
+</span><span><a class="LN" name="261">  261   </a>
+</span><span><a class="LN" name="262">  262   </a>  <span class="CT">/* initialize real-time model */</span>
+</span><span><a class="LN" name="263">  263   </a>  (<span class="DT">void</span>) memset((<span class="DT">void</span> *)<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>, 0,
+</span><span><a class="LN" name="264">  264   </a>                <span class="KW">sizeof</span>(<a href="rpi_dc_motor_control_types_h.html#type_RT_MODEL_rpi_dc_motor_control" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_RT_MODEL_rpi_dc_motor_control');" target="_self"><font color="#1122aa">RT_MODEL_rpi_dc_motor_control</font></a>));
+</span><span><a class="LN" name="265">  265   </a>  rtsiSetSolverName(&amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;solverInfo,<font color="#1122ff">&quot;FixedStepDiscrete&quot;</font>);
+</span><span><a class="LN" name="266">  266   </a>  <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;solverInfoPtr = (&amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;solverInfo);
+</span><span><a class="LN" name="267">  267   </a>
+</span><span><a class="LN" name="268">  268   </a>  <span class="CT">/* Initialize timing info */</span>
+</span><span><a class="LN" name="269">  269   </a>  <b>{</b>
+</span><span><a class="LN" name="270">  270   </a>    int_T *mdlTsMap = <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;Timing.sampleTimeTaskIDArray;
+</span><span><a class="LN" name="271">  271   </a>    mdlTsMap[0] = 0;
+</span><span><a class="LN" name="272">  272   </a>    <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;Timing.sampleTimeTaskIDPtr = (&amp;mdlTsMap[0]);
+</span><span><a class="LN" name="273">  273   </a>    <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;Timing.sampleTimes =
+</span><span><a class="LN" name="274">  274   </a>      (&amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;Timing.sampleTimesArray[0]);
+</span><span><a class="LN" name="275">  275   </a>    <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;Timing.offsetTimes =
+</span><span><a class="LN" name="276">  276   </a>      (&amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;Timing.offsetTimesArray[0]);
+</span><span><a class="LN" name="277">  277   </a>
+</span><span><a class="LN" name="278">  278   </a>    <span class="CT">/* task periods */</span>
+</span><span><a class="LN" name="279">  279   </a>    <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;Timing.sampleTimes[0] = (0.001);
+</span><span><a class="LN" name="280">  280   </a>
+</span><span><a class="LN" name="281">  281   </a>    <span class="CT">/* task offsets */</span>
+</span><span><a class="LN" name="282">  282   </a>    <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;Timing.offsetTimes[0] = (0.0);
+</span><span><a class="LN" name="283">  283   </a>  <b>}</b>
+</span><span><a class="LN" name="284">  284   </a>
+</span><span><a class="LN" name="285">  285   </a>  rtmSetTPtr(<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>, &amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;Timing.tArray[0]);
+</span><span><a class="LN" name="286">  286   </a>
+</span><span><a class="LN" name="287">  287   </a>  <b>{</b>
+</span><span><a class="LN" name="288">  288   </a>    int_T *mdlSampleHits = <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;Timing.sampleHitArray;
+</span><span><a class="LN" name="289">  289   </a>    mdlSampleHits[0] = 1;
+</span><span><a class="LN" name="290">  290   </a>    <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;Timing.sampleHits = (&amp;mdlSampleHits[0]);
+</span><span><a class="LN" name="291">  291   </a>  <b>}</b>
+</span><span><a class="LN" name="292">  292   </a>
+</span><span><a class="LN" name="293">  293   </a>  rtmSetTFinal(<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>, -1);
+</span><span><a class="LN" name="294">  294   </a>  <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;Timing.stepSize0 = 0.001;
+</span><span><a class="LN" name="295">  295   </a>  <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;solverInfoPtr = (&amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;solverInfo);
+</span><span><a class="LN" name="296">  296   </a>  <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;Timing.stepSize = (0.001);
+</span><span><a class="LN" name="297">  297   </a>  rtsiSetFixedStepSize(&amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;solverInfo, 0.001);
+</span><span><a class="LN" name="298">  298   </a>  rtsiSetSolverMode(&amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;solverInfo,
+</span><span><a class="LN" name="299">  299   </a>                    SOLVER_MODE_SINGLETASKING);
+</span><span><a class="LN" name="300">  300   </a>
+</span><span><a class="LN" name="301">  301   </a>  <span class="CT">/* block I/O */</span>
+</span><span><a class="LN" name="302">  302   </a>  (<span class="DT">void</span>) memset(((<span class="DT">void</span> *) &amp;<a href="#var_rpi_dc_motor_control_B" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_B');" target="_self"><font color="#1122aa">rpi_dc_motor_control_B</font></a>), 0,
+</span><span><a class="LN" name="303">  303   </a>                <span class="KW">sizeof</span>(<a href="rpi_dc_motor_control_h.html#type_BlockIO_rpi_dc_motor_control" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_BlockIO_rpi_dc_motor_control');" target="_self"><font color="#1122aa">BlockIO_rpi_dc_motor_control</font></a>));
+</span><span><a class="LN" name="304">  304   </a>
+</span><span><a class="LN" name="305">  305   </a>  <span class="CT">/* states (dwork) */</span>
+</span><span><a class="LN" name="306">  306   </a>  (<span class="DT">void</span>) memset((<span class="DT">void</span> *)&amp;<a href="#var_rpi_dc_motor_control_DWork" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_DWork');" target="_self"><font color="#1122aa">rpi_dc_motor_control_DWork</font></a>, 0,
+</span><span><a class="LN" name="307">  307   </a>                <span class="KW">sizeof</span>(<a href="rpi_dc_motor_control_h.html#type_D_Work_rpi_dc_motor_control" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_D_Work_rpi_dc_motor_control');" target="_self"><font color="#1122aa">D_Work_rpi_dc_motor_control</font></a>));
+</span><span><a class="LN" name="308">  308   </a>
+</span><span><a class="LN" name="309">  309   </a>  <span class="CT">/* child S-Function registration */</span>
+</span><span><a class="LN" name="310">  310   </a>  <b>{</b>
+</span><span><a class="LN" name="311">  311   </a>    RTWSfcnInfo *sfcnInfo = &amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;NonInlinedSFcns.sfcnInfo;
+</span><span><a class="LN" name="312">  312   </a>    <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;sfcnInfo = (sfcnInfo);
+</span><span><a class="LN" name="313">  313   </a>    rtssSetErrorStatusPtr(sfcnInfo, (&amp;rtmGetErrorStatus(<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>)));
+</span><span><a class="LN" name="314">  314   </a>    rtssSetNumRootSampTimesPtr(sfcnInfo,
+</span><span><a class="LN" name="315">  315   </a>      &amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;Sizes.numSampTimes);
+</span><span><a class="LN" name="316">  316   </a>    <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;NonInlinedSFcns.taskTimePtrs[0] = &amp;(rtmGetTPtr
+</span><span><a class="LN" name="317">  317   </a>      (<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>)[0]);
+</span><span><a class="LN" name="318">  318   </a>    rtssSetTPtrPtr(sfcnInfo,<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;NonInlinedSFcns.taskTimePtrs);
+</span><span><a class="LN" name="319">  319   </a>    rtssSetTStartPtr(sfcnInfo, &amp;rtmGetTStart(<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>));
+</span><span><a class="LN" name="320">  320   </a>    rtssSetTFinalPtr(sfcnInfo, &amp;rtmGetTFinal(<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>));
+</span><span><a class="LN" name="321">  321   </a>    rtssSetTimeOfLastOutputPtr(sfcnInfo, &amp;rtmGetTimeOfLastOutput
+</span><span><a class="LN" name="322">  322   </a>      (<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>));
+</span><span><a class="LN" name="323">  323   </a>    rtssSetStepSizePtr(sfcnInfo, &amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;Timing.stepSize);
+</span><span><a class="LN" name="324">  324   </a>    rtssSetStopRequestedPtr(sfcnInfo, &amp;rtmGetStopRequested
+</span><span><a class="LN" name="325">  325   </a>      (<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>));
+</span><span><a class="LN" name="326">  326   </a>    rtssSetDerivCacheNeedsResetPtr(sfcnInfo,
+</span><span><a class="LN" name="327">  327   </a>      &amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;ModelData.derivCacheNeedsReset);
+</span><span><a class="LN" name="328">  328   </a>    rtssSetZCCacheNeedsResetPtr(sfcnInfo,
+</span><span><a class="LN" name="329">  329   </a>      &amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;ModelData.zCCacheNeedsReset);
+</span><span><a class="LN" name="330">  330   </a>    rtssSetBlkStateChangePtr(sfcnInfo,
+</span><span><a class="LN" name="331">  331   </a>      &amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;ModelData.blkStateChange);
+</span><span><a class="LN" name="332">  332   </a>    rtssSetSampleHitsPtr(sfcnInfo, &amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;Timing.sampleHits);
+</span><span><a class="LN" name="333">  333   </a>    rtssSetPerTaskSampleHitsPtr(sfcnInfo,
+</span><span><a class="LN" name="334">  334   </a>      &amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;Timing.perTaskSampleHits);
+</span><span><a class="LN" name="335">  335   </a>    rtssSetSimModePtr(sfcnInfo, &amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;simMode);
+</span><span><a class="LN" name="336">  336   </a>    rtssSetSolverInfoPtr(sfcnInfo, &amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;solverInfoPtr);
+</span><span><a class="LN" name="337">  337   </a>  <b>}</b>
+</span><span><a class="LN" name="338">  338   </a>
+</span><span><a class="LN" name="339">  339   </a>  <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;Sizes.numSFcns = (2);
+</span><span><a class="LN" name="340">  340   </a>
+</span><span><a class="LN" name="341">  341   </a>  <span class="CT">/* register each child */</span>
+</span><span><a class="LN" name="342">  342   </a>  <b>{</b>
+</span><span><a class="LN" name="343">  343   </a>    (<span class="DT">void</span>) memset((<span class="DT">void</span> *)
+</span><span><a class="LN" name="344">  344   </a>                  &amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;NonInlinedSFcns.childSFunctions[0], 0,
+</span><span><a class="LN" name="345">  345   </a>                  2*<span class="KW">sizeof</span>(SimStruct));
+</span><span><a class="LN" name="346">  346   </a>    <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;childSfunctions =
+</span><span><a class="LN" name="347">  347   </a>      (&amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;NonInlinedSFcns.childSFunctionPtrs[0]);
+</span><span><a class="LN" name="348">  348   </a>    <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;childSfunctions[0] =
+</span><span><a class="LN" name="349">  349   </a>      (&amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;NonInlinedSFcns.childSFunctions[0]);
+</span><span><a class="LN" name="350">  350   </a>    <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;childSfunctions[1] =
+</span><span><a class="LN" name="351">  351   </a>      (&amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;NonInlinedSFcns.childSFunctions[1]);
+</span><span><a class="LN" name="352">  352   </a>
+</span><span><a class="LN" name="353">  353   </a>    <span class="CT">/* Level2 S-Function Block: rpi_dc_motor_control/&lt;Root&gt;/PWMwDir (sfPWMwDirOutput) */</span>
+</span><span><a class="LN" name="354">  354   </a>    <b>{</b>
+</span><span><a class="LN" name="355">  355   </a>      SimStruct *rts = <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;childSfunctions[0];
+</span><span><a class="LN" name="356">  356   </a>
+</span><span><a class="LN" name="357">  357   </a>      <span class="CT">/* timing info */</span>
+</span><span><a class="LN" name="358">  358   </a>      time_T *sfcnPeriod =
+</span><span><a class="LN" name="359">  359   </a>        <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;NonInlinedSFcns.Sfcn0.sfcnPeriod;
+</span><span><a class="LN" name="360">  360   </a>      time_T *sfcnOffset =
+</span><span><a class="LN" name="361">  361   </a>        <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;NonInlinedSFcns.Sfcn0.sfcnOffset;
+</span><span><a class="LN" name="362">  362   </a>      int_T *sfcnTsMap = <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;NonInlinedSFcns.Sfcn0.sfcnTsMap;
+</span><span><a class="LN" name="363">  363   </a>      (<span class="DT">void</span>) memset((<span class="DT">void</span>*)sfcnPeriod, 0,
+</span><span><a class="LN" name="364">  364   </a>                    <span class="KW">sizeof</span>(time_T)*1);
+</span><span><a class="LN" name="365">  365   </a>      (<span class="DT">void</span>) memset((<span class="DT">void</span>*)sfcnOffset, 0,
+</span><span><a class="LN" name="366">  366   </a>                    <span class="KW">sizeof</span>(time_T)*1);
+</span><span><a class="LN" name="367">  367   </a>      ssSetSampleTimePtr(rts, &amp;sfcnPeriod[0]);
+</span><span><a class="LN" name="368">  368   </a>      ssSetOffsetTimePtr(rts, &amp;sfcnOffset[0]);
+</span><span><a class="LN" name="369">  369   </a>      ssSetSampleTimeTaskIDPtr(rts, sfcnTsMap);
+</span><span><a class="LN" name="370">  370   </a>
+</span><span><a class="LN" name="371">  371   </a>      <span class="CT">/* Set up the mdlInfo pointer */</span>
+</span><span><a class="LN" name="372">  372   </a>      <b>{</b>
+</span><span><a class="LN" name="373">  373   </a>        ssSetBlkInfo2Ptr(rts, &amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;NonInlinedSFcns.blkInfo2
+</span><span><a class="LN" name="374">  374   </a>                         [0]);
+</span><span><a class="LN" name="375">  375   </a>      <b>}</b>
+</span><span><a class="LN" name="376">  376   </a>
+</span><span><a class="LN" name="377">  377   </a>      ssSetRTWSfcnInfo(rts, <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;sfcnInfo);
+</span><span><a class="LN" name="378">  378   </a>
+</span><span><a class="LN" name="379">  379   </a>      <span class="CT">/* Allocate memory of model methods 2 */</span>
+</span><span><a class="LN" name="380">  380   </a>      <b>{</b>
+</span><span><a class="LN" name="381">  381   </a>        ssSetModelMethods2(rts,
+</span><span><a class="LN" name="382">  382   </a>                           &amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;NonInlinedSFcns.methods2[0]);
+</span><span><a class="LN" name="383">  383   </a>      <b>}</b>
+</span><span><a class="LN" name="384">  384   </a>
+</span><span><a class="LN" name="385">  385   </a>      <span class="CT">/* Allocate memory of model methods 3 */</span>
+</span><span><a class="LN" name="386">  386   </a>      <b>{</b>
+</span><span><a class="LN" name="387">  387   </a>        ssSetModelMethods3(rts,
+</span><span><a class="LN" name="388">  388   </a>                           &amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;NonInlinedSFcns.methods3[0]);
+</span><span><a class="LN" name="389">  389   </a>      <b>}</b>
+</span><span><a class="LN" name="390">  390   </a>
+</span><span><a class="LN" name="391">  391   </a>      <span class="CT">/* Allocate memory for states auxilliary information */</span>
+</span><span><a class="LN" name="392">  392   </a>      <b>{</b>
+</span><span><a class="LN" name="393">  393   </a>        ssSetStatesInfo2(rts,
+</span><span><a class="LN" name="394">  394   </a>                         &amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;NonInlinedSFcns.statesInfo2[0]);
+</span><span><a class="LN" name="395">  395   </a>      <b>}</b>
+</span><span><a class="LN" name="396">  396   </a>
+</span><span><a class="LN" name="397">  397   </a>      <span class="CT">/* inputs */</span>
+</span><span><a class="LN" name="398">  398   </a>      <b>{</b>
+</span><span><a class="LN" name="399">  399   </a>        _ssSetNumInputPorts(rts, 1);
+</span><span><a class="LN" name="400">  400   </a>        ssSetPortInfoForInputs(rts,
+</span><span><a class="LN" name="401">  401   </a>          &amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;NonInlinedSFcns.Sfcn0.inputPortInfo[0]);
+</span><span><a class="LN" name="402">  402   </a>
+</span><span><a class="LN" name="403">  403   </a>        <span class="CT">/* port 0 */</span>
+</span><span><a class="LN" name="404">  404   </a>        <b>{</b>
+</span><span><a class="LN" name="405">  405   </a>          ssSetInputPortRequiredContiguous(rts, 0, 1);
+</span><span><a class="LN" name="406">  406   </a>          ssSetInputPortSignal(rts, 0, &amp;<a href="#var_rpi_dc_motor_control_B" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_B');" target="_self"><font color="#1122aa">rpi_dc_motor_control_B</font></a>.ManualPWMControl);
+</span><span><a class="LN" name="407">  407   </a>          _ssSetInputPortNumDimensions(rts, 0, 1);
+</span><span><a class="LN" name="408">  408   </a>          ssSetInputPortWidth(rts, 0, 1);
+</span><span><a class="LN" name="409">  409   </a>        <b>}</b>
+</span><span><a class="LN" name="410">  410   </a>      <b>}</b>
+</span><span><a class="LN" name="411">  411   </a>
+</span><span><a class="LN" name="412">  412   </a>      <span class="CT">/* path info */</span>
+</span><span><a class="LN" name="413">  413   </a>      ssSetModelName(rts, <font color="#1122ff">&quot;PWMwDir&quot;</font>);
+</span><span><a class="LN" name="414">  414   </a>      ssSetPath(rts, <font color="#1122ff">&quot;rpi_dc_motor_control/PWMwDir&quot;</font>);
+</span><span><a class="LN" name="415">  415   </a>      ssSetRTModel(rts,<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>);
+</span><span><a class="LN" name="416">  416   </a>      ssSetParentSS(rts, (NULL));
+</span><span><a class="LN" name="417">  417   </a>      ssSetRootSS(rts, rts);
+</span><span><a class="LN" name="418">  418   </a>      ssSetVersion(rts, SIMSTRUCT_VERSION_LEVEL2);
+</span><span><a class="LN" name="419">  419   </a>
+</span><span><a class="LN" name="420">  420   </a>      <span class="CT">/* parameters */</span>
+</span><span><a class="LN" name="421">  421   </a>      <b>{</b>
+</span><span><a class="LN" name="422">  422   </a>        <a href="rt_matrx_c.html#type_mxArray" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_mxArray');" target="_self"><font color="#1122aa">mxArray</font></a> **sfcnParams = (<a href="rt_matrx_c.html#type_mxArray" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_mxArray');" target="_self"><font color="#1122aa">mxArray</font></a> **)
+</span><span><a class="LN" name="423">  423   </a>          &amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;NonInlinedSFcns.Sfcn0.params;
+</span><span><a class="LN" name="424">  424   </a>        ssSetSFcnParamsCount(rts, 3);
+</span><span><a class="LN" name="425">  425   </a>        ssSetSFcnParamsPtr(rts, &amp;sfcnParams[0]);
+</span><span><a class="LN" name="426">  426   </a>        ssSetSFcnParam(rts, 0, (<a href="rt_matrx_c.html#type_mxArray" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_mxArray');" target="_self"><font color="#1122aa">mxArray</font></a>*)<a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.PWMwDir_P1_Size);
+</span><span><a class="LN" name="427">  427   </a>        ssSetSFcnParam(rts, 1, (<a href="rt_matrx_c.html#type_mxArray" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_mxArray');" target="_self"><font color="#1122aa">mxArray</font></a>*)<a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.PWMwDir_P2_Size);
+</span><span><a class="LN" name="428">  428   </a>        ssSetSFcnParam(rts, 2, (<a href="rt_matrx_c.html#type_mxArray" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_mxArray');" target="_self"><font color="#1122aa">mxArray</font></a>*)<a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.PWMwDir_P3_Size);
+</span><span><a class="LN" name="429">  429   </a>      <b>}</b>
+</span><span><a class="LN" name="430">  430   </a>
+</span><span><a class="LN" name="431">  431   </a>      <span class="CT">/* work vectors */</span>
+</span><span><a class="LN" name="432">  432   </a>      ssSetRWork(rts, (real_T *) &amp;<a href="#var_rpi_dc_motor_control_DWork" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_DWork');" target="_self"><font color="#1122aa">rpi_dc_motor_control_DWork</font></a>.PWMwDir_RWORK);
+</span><span><a class="LN" name="433">  433   </a>      ssSetIWork(rts, (int_T *) &amp;<a href="#var_rpi_dc_motor_control_DWork" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_DWork');" target="_self"><font color="#1122aa">rpi_dc_motor_control_DWork</font></a>.PWMwDir_IWORK[0]);
+</span><span><a class="LN" name="434">  434   </a>
+</span><span><a class="LN" name="435">  435   </a>      <b>{</b>
+</span><span><a class="LN" name="436">  436   </a>        <span class="KW">struct</span> _ssDWorkRecord *dWorkRecord = (<span class="KW">struct</span> _ssDWorkRecord *)
+</span><span><a class="LN" name="437">  437   </a>          &amp;rpi_dc_motor_control_M-&gt;NonInlinedSFcns.Sfcn0.dWork;
+</span><span><a class="LN" name="438">  438   </a>        <span class="KW">struct</span> _ssDWorkAuxRecord *dWorkAuxRecord = (<span class="KW">struct</span> _ssDWorkAuxRecord *)
+</span><span><a class="LN" name="439">  439   </a>          &amp;rpi_dc_motor_control_M-&gt;NonInlinedSFcns.Sfcn0.dWorkAux;
+</span><span><a class="LN" name="440">  440   </a>        ssSetSFcnDWork(rts, dWorkRecord);
+</span><span><a class="LN" name="441">  441   </a>        ssSetSFcnDWorkAux(rts, dWorkAuxRecord);
+</span><span><a class="LN" name="442">  442   </a>        _ssSetNumDWork(rts, 2);
+</span><span><a class="LN" name="443">  443   </a>
+</span><span><a class="LN" name="444">  444   </a>        <span class="CT">/* RWORK */</span>
+</span><span><a class="LN" name="445">  445   </a>        ssSetDWorkWidth(rts, 0, 1);
+</span><span><a class="LN" name="446">  446   </a>        ssSetDWorkDataType(rts, 0,SS_DOUBLE);
+</span><span><a class="LN" name="447">  447   </a>        ssSetDWorkComplexSignal(rts, 0, 0);
+</span><span><a class="LN" name="448">  448   </a>        ssSetDWork(rts, 0, &amp;<a href="#var_rpi_dc_motor_control_DWork" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_DWork');" target="_self"><font color="#1122aa">rpi_dc_motor_control_DWork</font></a>.PWMwDir_RWORK);
+</span><span><a class="LN" name="449">  449   </a>
+</span><span><a class="LN" name="450">  450   </a>        <span class="CT">/* IWORK */</span>
+</span><span><a class="LN" name="451">  451   </a>        ssSetDWorkWidth(rts, 1, 5);
+</span><span><a class="LN" name="452">  452   </a>        ssSetDWorkDataType(rts, 1,SS_INTEGER);
+</span><span><a class="LN" name="453">  453   </a>        ssSetDWorkComplexSignal(rts, 1, 0);
+</span><span><a class="LN" name="454">  454   </a>        ssSetDWork(rts, 1, &amp;<a href="#var_rpi_dc_motor_control_DWork" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_DWork');" target="_self"><font color="#1122aa">rpi_dc_motor_control_DWork</font></a>.PWMwDir_IWORK[0]);
+</span><span><a class="LN" name="455">  455   </a>      <b>}</b>
+</span><span><a class="LN" name="456">  456   </a>
+</span><span><a class="LN" name="457">  457   </a>      <span class="CT">/* registration */</span>
+</span><span><a class="LN" name="458">  458   </a>      sfPWMwDirOutput(rts);
+</span><span><a class="LN" name="459">  459   </a>      sfcnInitializeSizes(rts);
+</span><span><a class="LN" name="460">  460   </a>      sfcnInitializeSampleTimes(rts);
+</span><span><a class="LN" name="461">  461   </a>
+</span><span><a class="LN" name="462">  462   </a>      <span class="CT">/* adjust sample time */</span>
+</span><span><a class="LN" name="463">  463   </a>      ssSetSampleTime(rts, 0, 0.001);
+</span><span><a class="LN" name="464">  464   </a>      ssSetOffsetTime(rts, 0, 0.0);
+</span><span><a class="LN" name="465">  465   </a>      sfcnTsMap[0] = 0;
+</span><span><a class="LN" name="466">  466   </a>
+</span><span><a class="LN" name="467">  467   </a>      <span class="CT">/* set compiled values of dynamic vector attributes */</span>
+</span><span><a class="LN" name="468">  468   </a>      ssSetNumNonsampledZCs(rts, 0);
+</span><span><a class="LN" name="469">  469   </a>
+</span><span><a class="LN" name="470">  470   </a>      <span class="CT">/* Update connectivity flags for each port */</span>
+</span><span><a class="LN" name="471">  471   </a>      _ssSetInputPortConnected(rts, 0, 1);
+</span><span><a class="LN" name="472">  472   </a>
+</span><span><a class="LN" name="473">  473   </a>      <span class="CT">/* Update the BufferDstPort flags for each input port */</span>
+</span><span><a class="LN" name="474">  474   </a>      ssSetInputPortBufferDstPort(rts, 0, -1);
+</span><span><a class="LN" name="475">  475   </a>    <b>}</b>
+</span><span><a class="LN" name="476">  476   </a>
+</span><span><a class="LN" name="477">  477   </a>    <span class="CT">/* Level2 S-Function Block: rpi_dc_motor_control/&lt;Root&gt;/IRC0 (sfIRCInput) */</span>
+</span><span><a class="LN" name="478">  478   </a>    <b>{</b>
+</span><span><a class="LN" name="479">  479   </a>      SimStruct *rts = <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;childSfunctions[1];
+</span><span><a class="LN" name="480">  480   </a>
+</span><span><a class="LN" name="481">  481   </a>      <span class="CT">/* timing info */</span>
+</span><span><a class="LN" name="482">  482   </a>      time_T *sfcnPeriod =
+</span><span><a class="LN" name="483">  483   </a>        <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;NonInlinedSFcns.Sfcn1.sfcnPeriod;
+</span><span><a class="LN" name="484">  484   </a>      time_T *sfcnOffset =
+</span><span><a class="LN" name="485">  485   </a>        <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;NonInlinedSFcns.Sfcn1.sfcnOffset;
+</span><span><a class="LN" name="486">  486   </a>      int_T *sfcnTsMap = <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;NonInlinedSFcns.Sfcn1.sfcnTsMap;
+</span><span><a class="LN" name="487">  487   </a>      (<span class="DT">void</span>) memset((<span class="DT">void</span>*)sfcnPeriod, 0,
+</span><span><a class="LN" name="488">  488   </a>                    <span class="KW">sizeof</span>(time_T)*1);
+</span><span><a class="LN" name="489">  489   </a>      (<span class="DT">void</span>) memset((<span class="DT">void</span>*)sfcnOffset, 0,
+</span><span><a class="LN" name="490">  490   </a>                    <span class="KW">sizeof</span>(time_T)*1);
+</span><span><a class="LN" name="491">  491   </a>      ssSetSampleTimePtr(rts, &amp;sfcnPeriod[0]);
+</span><span><a class="LN" name="492">  492   </a>      ssSetOffsetTimePtr(rts, &amp;sfcnOffset[0]);
+</span><span><a class="LN" name="493">  493   </a>      ssSetSampleTimeTaskIDPtr(rts, sfcnTsMap);
+</span><span><a class="LN" name="494">  494   </a>
+</span><span><a class="LN" name="495">  495   </a>      <span class="CT">/* Set up the mdlInfo pointer */</span>
+</span><span><a class="LN" name="496">  496   </a>      <b>{</b>
+</span><span><a class="LN" name="497">  497   </a>        ssSetBlkInfo2Ptr(rts, &amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;NonInlinedSFcns.blkInfo2
+</span><span><a class="LN" name="498">  498   </a>                         [1]);
+</span><span><a class="LN" name="499">  499   </a>      <b>}</b>
+</span><span><a class="LN" name="500">  500   </a>
+</span><span><a class="LN" name="501">  501   </a>      ssSetRTWSfcnInfo(rts, <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;sfcnInfo);
+</span><span><a class="LN" name="502">  502   </a>
+</span><span><a class="LN" name="503">  503   </a>      <span class="CT">/* Allocate memory of model methods 2 */</span>
+</span><span><a class="LN" name="504">  504   </a>      <b>{</b>
+</span><span><a class="LN" name="505">  505   </a>        ssSetModelMethods2(rts,
+</span><span><a class="LN" name="506">  506   </a>                           &amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;NonInlinedSFcns.methods2[1]);
+</span><span><a class="LN" name="507">  507   </a>      <b>}</b>
+</span><span><a class="LN" name="508">  508   </a>
+</span><span><a class="LN" name="509">  509   </a>      <span class="CT">/* Allocate memory of model methods 3 */</span>
+</span><span><a class="LN" name="510">  510   </a>      <b>{</b>
+</span><span><a class="LN" name="511">  511   </a>        ssSetModelMethods3(rts,
+</span><span><a class="LN" name="512">  512   </a>                           &amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;NonInlinedSFcns.methods3[1]);
+</span><span><a class="LN" name="513">  513   </a>      <b>}</b>
+</span><span><a class="LN" name="514">  514   </a>
+</span><span><a class="LN" name="515">  515   </a>      <span class="CT">/* Allocate memory for states auxilliary information */</span>
+</span><span><a class="LN" name="516">  516   </a>      <b>{</b>
+</span><span><a class="LN" name="517">  517   </a>        ssSetStatesInfo2(rts,
+</span><span><a class="LN" name="518">  518   </a>                         &amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;NonInlinedSFcns.statesInfo2[1]);
+</span><span><a class="LN" name="519">  519   </a>      <b>}</b>
+</span><span><a class="LN" name="520">  520   </a>
+</span><span><a class="LN" name="521">  521   </a>      <span class="CT">/* inputs */</span>
+</span><span><a class="LN" name="522">  522   </a>      <b>{</b>
+</span><span><a class="LN" name="523">  523   </a>        _ssSetNumInputPorts(rts, 1);
+</span><span><a class="LN" name="524">  524   </a>        ssSetPortInfoForInputs(rts,
+</span><span><a class="LN" name="525">  525   </a>          &amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;NonInlinedSFcns.Sfcn1.inputPortInfo[0]);
+</span><span><a class="LN" name="526">  526   </a>
+</span><span><a class="LN" name="527">  527   </a>        <span class="CT">/* port 0 */</span>
+</span><span><a class="LN" name="528">  528   </a>        <b>{</b>
+</span><span><a class="LN" name="529">  529   </a>          ssSetInputPortRequiredContiguous(rts, 0, 1);
+</span><span><a class="LN" name="530">  530   </a>          ssSetInputPortSignal(rts, 0, &amp;<a href="#var_rpi_dc_motor_control_B" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_B');" target="_self"><font color="#1122aa">rpi_dc_motor_control_B</font></a>.Toint);
+</span><span><a class="LN" name="531">  531   </a>          _ssSetInputPortNumDimensions(rts, 0, 1);
+</span><span><a class="LN" name="532">  532   </a>          ssSetInputPortWidth(rts, 0, 1);
+</span><span><a class="LN" name="533">  533   </a>        <b>}</b>
+</span><span><a class="LN" name="534">  534   </a>      <b>}</b>
+</span><span><a class="LN" name="535">  535   </a>
+</span><span><a class="LN" name="536">  536   </a>      <span class="CT">/* outputs */</span>
+</span><span><a class="LN" name="537">  537   </a>      <b>{</b>
+</span><span><a class="LN" name="538">  538   </a>        ssSetPortInfoForOutputs(rts,
+</span><span><a class="LN" name="539">  539   </a>          &amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;NonInlinedSFcns.Sfcn1.outputPortInfo[0]);
+</span><span><a class="LN" name="540">  540   </a>        _ssSetNumOutputPorts(rts, 1);
+</span><span><a class="LN" name="541">  541   </a>
+</span><span><a class="LN" name="542">  542   </a>        <span class="CT">/* port 0 */</span>
+</span><span><a class="LN" name="543">  543   </a>        <b>{</b>
+</span><span><a class="LN" name="544">  544   </a>          _ssSetOutputPortNumDimensions(rts, 0, 1);
+</span><span><a class="LN" name="545">  545   </a>          ssSetOutputPortWidth(rts, 0, 1);
+</span><span><a class="LN" name="546">  546   </a>          ssSetOutputPortSignal(rts, 0, ((int32_T *)
+</span><span><a class="LN" name="547">  547   </a>            &amp;<a href="#var_rpi_dc_motor_control_B" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_B');" target="_self"><font color="#1122aa">rpi_dc_motor_control_B</font></a>.IRC0));
+</span><span><a class="LN" name="548">  548   </a>        <b>}</b>
+</span><span><a class="LN" name="549">  549   </a>      <b>}</b>
+</span><span><a class="LN" name="550">  550   </a>
+</span><span><a class="LN" name="551">  551   </a>      <span class="CT">/* path info */</span>
+</span><span><a class="LN" name="552">  552   </a>      ssSetModelName(rts, <font color="#1122ff">&quot;IRC0&quot;</font>);
+</span><span><a class="LN" name="553">  553   </a>      ssSetPath(rts, <font color="#1122ff">&quot;rpi_dc_motor_control/IRC0&quot;</font>);
+</span><span><a class="LN" name="554">  554   </a>      ssSetRTModel(rts,<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>);
+</span><span><a class="LN" name="555">  555   </a>      ssSetParentSS(rts, (NULL));
+</span><span><a class="LN" name="556">  556   </a>      ssSetRootSS(rts, rts);
+</span><span><a class="LN" name="557">  557   </a>      ssSetVersion(rts, SIMSTRUCT_VERSION_LEVEL2);
+</span><span><a class="LN" name="558">  558   </a>
+</span><span><a class="LN" name="559">  559   </a>      <span class="CT">/* parameters */</span>
+</span><span><a class="LN" name="560">  560   </a>      <b>{</b>
+</span><span><a class="LN" name="561">  561   </a>        <a href="rt_matrx_c.html#type_mxArray" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_mxArray');" target="_self"><font color="#1122aa">mxArray</font></a> **sfcnParams = (<a href="rt_matrx_c.html#type_mxArray" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_mxArray');" target="_self"><font color="#1122aa">mxArray</font></a> **)
+</span><span><a class="LN" name="562">  562   </a>          &amp;<a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;NonInlinedSFcns.Sfcn1.params;
+</span><span><a class="LN" name="563">  563   </a>        ssSetSFcnParamsCount(rts, 7);
+</span><span><a class="LN" name="564">  564   </a>        ssSetSFcnParamsPtr(rts, &amp;sfcnParams[0]);
+</span><span><a class="LN" name="565">  565   </a>        ssSetSFcnParam(rts, 0, (<a href="rt_matrx_c.html#type_mxArray" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_mxArray');" target="_self"><font color="#1122aa">mxArray</font></a>*)<a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.IRC0_P1_Size);
+</span><span><a class="LN" name="566">  566   </a>        ssSetSFcnParam(rts, 1, (<a href="rt_matrx_c.html#type_mxArray" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_mxArray');" target="_self"><font color="#1122aa">mxArray</font></a>*)<a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.IRC0_P2_Size);
+</span><span><a class="LN" name="567">  567   </a>        ssSetSFcnParam(rts, 2, (<a href="rt_matrx_c.html#type_mxArray" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_mxArray');" target="_self"><font color="#1122aa">mxArray</font></a>*)<a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.IRC0_P3_Size);
+</span><span><a class="LN" name="568">  568   </a>        ssSetSFcnParam(rts, 3, (<a href="rt_matrx_c.html#type_mxArray" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_mxArray');" target="_self"><font color="#1122aa">mxArray</font></a>*)<a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.IRC0_P4_Size);
+</span><span><a class="LN" name="569">  569   </a>        ssSetSFcnParam(rts, 4, (<a href="rt_matrx_c.html#type_mxArray" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_mxArray');" target="_self"><font color="#1122aa">mxArray</font></a>*)<a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.IRC0_P5_Size);
+</span><span><a class="LN" name="570">  570   </a>        ssSetSFcnParam(rts, 5, (<a href="rt_matrx_c.html#type_mxArray" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_mxArray');" target="_self"><font color="#1122aa">mxArray</font></a>*)<a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.IRC0_P6_Size);
+</span><span><a class="LN" name="571">  571   </a>        ssSetSFcnParam(rts, 6, (<a href="rt_matrx_c.html#type_mxArray" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_mxArray');" target="_self"><font color="#1122aa">mxArray</font></a>*)<a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.IRC0_P7_Size);
+</span><span><a class="LN" name="572">  572   </a>      <b>}</b>
+</span><span><a class="LN" name="573">  573   </a>
+</span><span><a class="LN" name="574">  574   </a>      <span class="CT">/* work vectors */</span>
+</span><span><a class="LN" name="575">  575   </a>      ssSetIWork(rts, (int_T *) &amp;<a href="#var_rpi_dc_motor_control_DWork" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_DWork');" target="_self"><font color="#1122aa">rpi_dc_motor_control_DWork</font></a>.IRC0_IWORK[0]);
+</span><span><a class="LN" name="576">  576   </a>
+</span><span><a class="LN" name="577">  577   </a>      <b>{</b>
+</span><span><a class="LN" name="578">  578   </a>        <span class="KW">struct</span> _ssDWorkRecord *dWorkRecord = (<span class="KW">struct</span> _ssDWorkRecord *)
+</span><span><a class="LN" name="579">  579   </a>          &amp;rpi_dc_motor_control_M-&gt;NonInlinedSFcns.Sfcn1.dWork;
+</span><span><a class="LN" name="580">  580   </a>        <span class="KW">struct</span> _ssDWorkAuxRecord *dWorkAuxRecord = (<span class="KW">struct</span> _ssDWorkAuxRecord *)
+</span><span><a class="LN" name="581">  581   </a>          &amp;rpi_dc_motor_control_M-&gt;NonInlinedSFcns.Sfcn1.dWorkAux;
+</span><span><a class="LN" name="582">  582   </a>        ssSetSFcnDWork(rts, dWorkRecord);
+</span><span><a class="LN" name="583">  583   </a>        ssSetSFcnDWorkAux(rts, dWorkAuxRecord);
+</span><span><a class="LN" name="584">  584   </a>        _ssSetNumDWork(rts, 1);
+</span><span><a class="LN" name="585">  585   </a>
+</span><span><a class="LN" name="586">  586   </a>        <span class="CT">/* IWORK */</span>
+</span><span><a class="LN" name="587">  587   </a>        ssSetDWorkWidth(rts, 0, 8);
+</span><span><a class="LN" name="588">  588   </a>        ssSetDWorkDataType(rts, 0,SS_INTEGER);
+</span><span><a class="LN" name="589">  589   </a>        ssSetDWorkComplexSignal(rts, 0, 0);
+</span><span><a class="LN" name="590">  590   </a>        ssSetDWork(rts, 0, &amp;<a href="#var_rpi_dc_motor_control_DWork" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_DWork');" target="_self"><font color="#1122aa">rpi_dc_motor_control_DWork</font></a>.IRC0_IWORK[0]);
+</span><span><a class="LN" name="591">  591   </a>      <b>}</b>
+</span><span><a class="LN" name="592">  592   </a>
+</span><span><a class="LN" name="593">  593   </a>      <span class="CT">/* registration */</span>
+</span><span><a class="LN" name="594">  594   </a>      sfIRCInput(rts);
+</span><span><a class="LN" name="595">  595   </a>      sfcnInitializeSizes(rts);
+</span><span><a class="LN" name="596">  596   </a>      sfcnInitializeSampleTimes(rts);
+</span><span><a class="LN" name="597">  597   </a>
+</span><span><a class="LN" name="598">  598   </a>      <span class="CT">/* adjust sample time */</span>
+</span><span><a class="LN" name="599">  599   </a>      ssSetSampleTime(rts, 0, 0.001);
+</span><span><a class="LN" name="600">  600   </a>      ssSetOffsetTime(rts, 0, 0.0);
+</span><span><a class="LN" name="601">  601   </a>      sfcnTsMap[0] = 0;
+</span><span><a class="LN" name="602">  602   </a>
+</span><span><a class="LN" name="603">  603   </a>      <span class="CT">/* set compiled values of dynamic vector attributes */</span>
+</span><span><a class="LN" name="604">  604   </a>      ssSetNumNonsampledZCs(rts, 0);
+</span><span><a class="LN" name="605">  605   </a>
+</span><span><a class="LN" name="606">  606   </a>      <span class="CT">/* Update connectivity flags for each port */</span>
+</span><span><a class="LN" name="607">  607   </a>      _ssSetInputPortConnected(rts, 0, 1);
+</span><span><a class="LN" name="608">  608   </a>      _ssSetOutputPortConnected(rts, 0, 1);
+</span><span><a class="LN" name="609">  609   </a>      _ssSetOutputPortBeingMerged(rts, 0, 0);
+</span><span><a class="LN" name="610">  610   </a>
+</span><span><a class="LN" name="611">  611   </a>      <span class="CT">/* Update the BufferDstPort flags for each input port */</span>
+</span><span><a class="LN" name="612">  612   </a>      ssSetInputPortBufferDstPort(rts, 0, -1);
+</span><span><a class="LN" name="613">  613   </a>    <b>}</b>
+</span><span><a class="LN" name="614">  614   </a>  <b>}</b>
+</span><span><a class="LN" name="615">  615   </a>
+</span><span><a class="LN" name="616">  616   </a>  <span class="CT">/* Level2 S-Function Block: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:425')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/PWMwDir</i></font></a>' (sfPWMwDirOutput) */</span>
+</span><span><a class="LN" name="617">  617   </a>  <b>{</b>
+</span><span><a class="LN" name="618">  618   </a>    SimStruct *rts = <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;childSfunctions[0];
+</span><span><a class="LN" name="619">  619   </a>    sfcnStart(rts);
+</span><span><a class="LN" name="620">  620   </a>    <span class="KW">if</span> (ssGetErrorStatus(rts) != (NULL))
+</span><span><a class="LN" name="621">  621   </a>      <span class="KW">return</span>;
+</span><span><a class="LN" name="622">  622   </a>  <b>}</b>
+</span><span><a class="LN" name="623">  623   </a>
+</span><span><a class="LN" name="624">  624   </a>  <span class="CT">/* Start for Enabled SubSystem: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:486')" name="code2model"><font color="#117755"><i>&lt;S2&gt;/Latch</i></font></a>' */</span>
+</span><span><a class="LN" name="625">  625   </a>  <span class="CT">/* VirtualOutportStart for Outport: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:486:3')" name="code2model"><font color="#117755"><i>&lt;S3&gt;/ </i></font></a>' */</span>
+</span><span><a class="LN" name="626">  626   </a>  <a href="#var_rpi_dc_motor_control_B" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_B');" target="_self"><font color="#1122aa">rpi_dc_motor_control_B</font></a>.In = <a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>._Y0;
+</span><span><a class="LN" name="627">  627   </a>
+</span><span><a class="LN" name="628">  628   </a>  <span class="CT">/* End of Start for SubSystem: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:486')" name="code2model"><font color="#117755"><i>&lt;S2&gt;/Latch</i></font></a>' */</span>
+</span><span><a class="LN" name="629">  629   </a>  <span class="CT">/* Level2 S-Function Block: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:392')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/IRC0</i></font></a>' (sfIRCInput) */</span>
+</span><span><a class="LN" name="630">  630   </a>  <b>{</b>
+</span><span><a class="LN" name="631">  631   </a>    SimStruct *rts = <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;childSfunctions[1];
+</span><span><a class="LN" name="632">  632   </a>    sfcnStart(rts);
+</span><span><a class="LN" name="633">  633   </a>    <span class="KW">if</span> (ssGetErrorStatus(rts) != (NULL))
+</span><span><a class="LN" name="634">  634   </a>      <span class="KW">return</span>;
+</span><span><a class="LN" name="635">  635   </a>  <b>}</b>
+</span><span><a class="LN" name="636">  636   </a>
+</span><span><a class="LN" name="637">  637   </a>  <span class="CT">/* Level2 S-Function Block: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:425')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/PWMwDir</i></font></a>' (sfPWMwDirOutput) */</span>
+</span><span><a class="LN" name="638">  638   </a>  <b>{</b>
+</span><span><a class="LN" name="639">  639   </a>    SimStruct *rts = <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;childSfunctions[0];
+</span><span><a class="LN" name="640">  640   </a>    sfcnInitializeConditions(rts);
+</span><span><a class="LN" name="641">  641   </a>    <span class="KW">if</span> (ssGetErrorStatus(rts) != (NULL))
+</span><span><a class="LN" name="642">  642   </a>      <span class="KW">return</span>;
+</span><span><a class="LN" name="643">  643   </a>  <b>}</b>
+</span><span><a class="LN" name="644">  644   </a>
+</span><span><a class="LN" name="645">  645   </a>  <span class="CT">/* InitializeConditions for Memory: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:489')" name="code2model"><font color="#117755"><i>&lt;S2&gt;/Memory</i></font></a>' */</span>
+</span><span><a class="LN" name="646">  646   </a>  <a href="#var_rpi_dc_motor_control_DWork" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_DWork');" target="_self"><font color="#1122aa">rpi_dc_motor_control_DWork</font></a>.Memory_PreviousInput =
+</span><span><a class="LN" name="647">  647   </a>    <a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.Memory_X0;
+</span><span><a class="LN" name="648">  648   </a>
+</span><span><a class="LN" name="649">  649   </a>  <span class="CT">/* Level2 S-Function Block: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:392')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/IRC0</i></font></a>' (sfIRCInput) */</span>
+</span><span><a class="LN" name="650">  650   </a>  <b>{</b>
+</span><span><a class="LN" name="651">  651   </a>    SimStruct *rts = <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;childSfunctions[1];
+</span><span><a class="LN" name="652">  652   </a>    sfcnInitializeConditions(rts);
+</span><span><a class="LN" name="653">  653   </a>    <span class="KW">if</span> (ssGetErrorStatus(rts) != (NULL))
+</span><span><a class="LN" name="654">  654   </a>      <span class="KW">return</span>;
+</span><span><a class="LN" name="655">  655   </a>  <b>}</b>
+</span><span><a class="LN" name="656">  656   </a>
+</span><span><a class="LN" name="657">  657   </a>  <span class="CT">/* InitializeConditions for DiscreteIntegrator: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:453')" name="code2model"><font color="#117755"><i>&lt;S1&gt;/Int1</i></font></a>' */</span>
+</span><span><a class="LN" name="658">  658   </a>  <a href="#var_rpi_dc_motor_control_DWork" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_DWork');" target="_self"><font color="#1122aa">rpi_dc_motor_control_DWork</font></a>.Int1_DSTATE = <a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.Int1_IC;
+</span><span><a class="LN" name="659">  659   </a>  <a href="#var_rpi_dc_motor_control_DWork" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_DWork');" target="_self"><font color="#1122aa">rpi_dc_motor_control_DWork</font></a>.Int1_PrevResetState = 0;
+</span><span><a class="LN" name="660">  660   </a>
+</span><span><a class="LN" name="661">  661   </a>  <span class="CT">/* InitializeConditions for UnitDelay: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:458')" name="code2model"><font color="#117755"><i>&lt;S1&gt;/Unit Delay</i></font></a>' */</span>
+</span><span><a class="LN" name="662">  662   </a>  <a href="#var_rpi_dc_motor_control_DWork" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_DWork');" target="_self"><font color="#1122aa">rpi_dc_motor_control_DWork</font></a>.UnitDelay_DSTATE =
+</span><span><a class="LN" name="663">  663   </a>    <a href="rpi_dc_motor_control_data_c.html#var_rpi_dc_motor_control_P" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_P');" target="_self"><font color="#1122aa">rpi_dc_motor_control_P</font></a>.UnitDelay_InitialCondition;
+</span><span><a class="LN" name="664">  664   </a><b>}</b>
+</span><span><a class="LN" name="665">  665   </a>
+</span><span><a class="LN" name="666">  666   </a><span class="CT">/* Model terminate function */</span>
+</span><span><a class="LN" name="667">  667   </a><span class="DT">void</span> <a name="fcn_rpi_dc_motor_control_terminate">rpi_dc_motor_control_terminate</a>(<span class="DT">void</span>)
+</span><span><a class="LN" name="668">  668   </a><b>{</b>
+</span><span><a class="LN" name="669">  669   </a>  <span class="CT">/* Level2 S-Function Block: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:425')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/PWMwDir</i></font></a>' (sfPWMwDirOutput) */</span>
+</span><span><a class="LN" name="670">  670   </a>  <b>{</b>
+</span><span><a class="LN" name="671">  671   </a>    SimStruct *rts = <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;childSfunctions[0];
+</span><span><a class="LN" name="672">  672   </a>    sfcnTerminate(rts);
+</span><span><a class="LN" name="673">  673   </a>  <b>}</b>
+</span><span><a class="LN" name="674">  674   </a>
+</span><span><a class="LN" name="675">  675   </a>  <span class="CT">/* Level2 S-Function Block: '<a href="matlab:coder.internal.code2model('rpi_dc_motor_control:392')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/IRC0</i></font></a>' (sfIRCInput) */</span>
+</span><span><a class="LN" name="676">  676   </a>  <b>{</b>
+</span><span><a class="LN" name="677">  677   </a>    SimStruct *rts = <a href="#var_rpi_dc_motor_control_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rpi_dc_motor_control_M');" target="_self"><font color="#1122aa">rpi_dc_motor_control_M</font></a>-&gt;childSfunctions[1];
+</span><span><a class="LN" name="678">  678   </a>    sfcnTerminate(rts);
+</span><span><a class="LN" name="679">  679   </a>  <b>}</b>
+</span><span><a class="LN" name="680">  680   </a><b>}</b>
+</span><span><a class="LN" name="681">  681   </a>
+</span><span><a class="LN" name="682">  682   </a><span class="CT">/*</span>
+</span><span><a class="LN" name="683">  683   </a><span class="CT"> * File trailer for generated code.</span>
+</span><span><a class="LN" name="684">  684   </a><span class="CT"> *</span>
+</span><span><a class="LN" name="685">  685   </a><span class="CT"> * [EOF]</span>
+</span><span><a class="LN" name="686">  686   </a><span class="CT"> */</span>
+</span><span><a class="LN" name="687">  687   </a>
+</span></pre>
+</td></tr></table>
+</p>
+</body>
+</html>
